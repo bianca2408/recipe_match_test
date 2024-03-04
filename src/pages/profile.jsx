@@ -505,7 +505,7 @@ useEffect(() =>{
                       <span className="username">Nume: {user.displayName}</span>
                       <br></br>
                       <span className="email">Email: {user.email}</span>
-
+<br></br>
                     </div>
                     </div>
                     

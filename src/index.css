@@ -249,7 +249,7 @@ body.dark .switch::before{
 .main--content{
   position: absolute;
   top: 40px;
-  height: 100vh;
+  /* height: 100%; */
   left: 300px;
   width: calc(100% - 300px);
   border-radius: 20px;
@@ -314,8 +314,7 @@ body.dark .switch::before{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-radius: 20px;
   background: #433520;
   padding: 10px;
   
@@ -399,6 +398,7 @@ body.dark .switch::before{
   position: relative;
   width: 100%;
   height: auto;
+  border-radius: 20px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
   background: #ddd;
