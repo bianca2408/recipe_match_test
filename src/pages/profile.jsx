@@ -161,7 +161,7 @@ useEffect(() =>{
       const recipesClone = [...recipes]
 
       recipesClone.forEach(recipe => {
-        if(recipe.id ==id){
+        if(recipe.id === id){
           recipe.viewing = !recipe.viewing
         } else{
           recipe.viewing = false
@@ -268,7 +268,7 @@ useEffect(() =>{
                         </li>
                     <ul className="menu-links">
                         <li className="nav-link">
-                            <a href="#">
+                            <a href="">
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Retete
@@ -276,7 +276,7 @@ useEffect(() =>{
                             </a>
                         </li>
                         <li className="nav-link">
-                            <a href="#">
+                            <a href="">
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Grupuri
@@ -284,7 +284,7 @@ useEffect(() =>{
                             </a>
                         </li>
                         <li className="nav-link">
-                            <a href="#">
+                            <a href="">
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Favorite
@@ -292,7 +292,7 @@ useEffect(() =>{
                             </a>
                         </li>
                         <li className="nav-link">
-                            <a href="#">
+                            <a href="">
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Frigider
@@ -300,7 +300,7 @@ useEffect(() =>{
                             </a>
                         </li>
                         <li className="nav-link">
-                            <a href="#">
+                            <a href="">
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Setari
@@ -311,7 +311,7 @@ useEffect(() =>{
                     </div>
                     <div className="bottom-content">
                     <li className="">
-                            <a href="#">
+                            <a href="">
                             <box-icon onClick={handleLogOut} name='log-out' class="icon"></box-icon>
                                 <span onClick={handleLogOut} className="text nav-text">
                                     Deconectare

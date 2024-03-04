@@ -156,7 +156,7 @@ const errorMessage = error.message;
                         </li>
                     <ul className="menu-links">
                         <li className="nav-link">
-                            <a href="#">
+                            <a href="">
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Retete
