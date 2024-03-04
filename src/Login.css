@@ -33,10 +33,14 @@ body {
     radial-gradient(var(--_r) left  var(--_g0)) calc(var(--_s)/ 2) var(--s),
     linear-gradient(90deg,#433520 50%,#00917C 0);
   background-size: var(--_s) calc(4*var(--s));
-  /* backdrop-filter: blur(5px); */
+  /* -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px); */
 
 }
-
+.login_background{
+    background: inherit;
+    backdrop-filter: blur(5px);
+}
 .main{
 	width: 350px;
 	height: 500px;

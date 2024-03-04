@@ -18,7 +18,7 @@ ReactDOM.render(
   <BrowserRouter>
     <Routes>
       <Route index path='/' element={<Login />}></Route>
-      <Route index path='/acasa' element={<Home />}></Route>
+      <Route index path='/home' element={<Home />}></Route>
 
       
       <Route index path='/profile' element={<Profile />}></Route>

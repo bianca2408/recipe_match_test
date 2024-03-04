@@ -73,7 +73,7 @@ const Login = () => {
         const user = userCredential.user;
 
         console.log(user);
-        navigate('/');
+        navigate('/home');
      })
   .catch((error) => {
     const errorCode = error.code;
@@ -120,7 +120,8 @@ const Login = () => {
     
  
     return(
-        <div className="login_background">
+
+        <div >
             <div class="area" >
         <div class="main">
 {/* <div>curent user: {user?.email}</div> */}

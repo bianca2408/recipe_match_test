@@ -132,7 +132,7 @@ const errorMessage = error.message;
     return(
         <div>
             
-            <body>
+            <body >
             <nav className="sidebar close">
             <header>
                 <div className="image-text">
@@ -259,7 +259,7 @@ const errorMessage = error.message;
                     
                     <button class="add--recipe" ><box-icon name='plus'></box-icon>
                     </button>
-                    <Link to='/profile'><img src={user?.photoURL} /></Link>
+                    <Link to='/profile'><img src={user?.photoURL || profile} /></Link>
                         
                         
                         </div>
