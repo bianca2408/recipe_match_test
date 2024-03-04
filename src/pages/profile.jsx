@@ -268,55 +268,55 @@ useEffect(() =>{
                         </li>
                     <ul className="menu-links">
                         <li className="nav-link">
-                            <a href="">
+                        <Link to='/profile'>
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Retete
                                 </span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="nav-link">
-                            <a href="">
+                        <Link to='/profile'>
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Grupuri
                                 </span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="nav-link">
-                            <a href="">
+                        <Link to='/profile'>
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Favorite
                                 </span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="nav-link">
-                            <a href="">
+                        <Link to='/profile'>
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Frigider
                                 </span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="nav-link">
-                            <a href="">
+                        <Link to='/profile'>
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Setari
                                 </span>
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                     </div>
                     <div className="bottom-content">
                     <li className="">
-                            <a href="">
+                    <Link to='/profile'>
                             <box-icon onClick={handleLogOut} name='log-out' class="icon"></box-icon>
                                 <span onClick={handleLogOut} className="text nav-text">
                                     Deconectare
                                 </span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="mode">
                             
