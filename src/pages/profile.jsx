@@ -501,8 +501,10 @@ useEffect(() =>{
                     <div className="user-info">
                     <button onClick={() => setPopupActive(!popupActive)} class="add--recipe" >Adauga reteta
                     </button>
-                      <span className="username">{user.displayName}</span>
-                      <span className="email">{user.email}</span>
+                    <br></br>
+                      <span className="username">Nume: {user.displayName}</span>
+                      <br></br>
+                      <span className="email">Email: {user.email}</span>
 
                     </div>
                     </div>
