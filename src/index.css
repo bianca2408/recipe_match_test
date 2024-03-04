@@ -51,6 +51,7 @@ body.dark{
   z-index: 10;
   
 }
+
 .sidebar.close{
   width: 88px;
 }
@@ -568,3 +569,16 @@ input, textarea {
   margin-top: 1rem;
 }
 /* //PAGINA PROFIL CSS// */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    top: 0px;
+    left: 0px;
+    
+    
+    /* Alte stiluri pentru ecrane mici... */
+  }
+  .main--content{
+    top: 0px;
+    left: 0px;
+  }
+}

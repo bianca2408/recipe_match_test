@@ -138,7 +138,8 @@ useEffect(() =>{
       descriere: "",
       ingrediente: [],
       instructiuni: [],
-      imagine: ""
+      imagine: "",
+      utilizator: ""
     })
     const [popupActive, setPopupActive] = useState(false)
   
@@ -190,7 +191,8 @@ useEffect(() =>{
         descriere: "",
         ingrediente: [],
         instructiuni: [],
-        imagine: ""
+        imagine: "",
+        utilizator: ""
       })
   
       setPopupActive(false)
@@ -232,6 +234,9 @@ useEffect(() =>{
         instructiuni: [...form.instructiuni, ""]
       })
     }
+    const setAuth = () => {
+    setForm({...form, utilizator: user.displayName}
+    )}
   
     const removeRecipe = id => {
       deleteDoc(doc(database, "retete_utilizator", id))
@@ -341,6 +346,7 @@ useEffect(() =>{
           {recipes.map((recipe, i  )=> (
             <div className="recipe" key={recipe.id}>
              <img className="img_recipe" src={recipe.imagine}></img> 
+             <h4>Postat de {recipe.utilizator}</h4>
              <h3>{recipe.titlu}</h3>
               <p dangerouslySetInnerHTML={{__html: recipe.descriere}}></p>
 
@@ -447,7 +453,7 @@ useEffect(() =>{
 </div>
 
 <div className="buttons">
-  <button type="submit">Submit</button>
+  <button onClick={setAuth} type="submit">Submit</button>
   <button type="button" class="remove" onClick={() => setPopupActive(false)}>Close</button>
 </div>
 
