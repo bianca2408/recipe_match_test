@@ -19,7 +19,7 @@ import { auth } from "../firebase.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
-import RecipeCard from 'react-tinder-card';
+// import RecipeCard from 'react-tinder-card';
 import { database } from '../firebase';
 import { collection, doc, getDocs } from 'firebase/firestore';
 
@@ -259,7 +259,7 @@ const errorMessage = error.message;
                     
                     <button class="add--recipe" ><box-icon name='plus'></box-icon>
                     </button>
-                    <Link to='/profile'><img src={user.photoURL} /></Link>
+                    <Link to='/profile'><img src={user?.photoURL} /></Link>
                         
                         
                         </div>
