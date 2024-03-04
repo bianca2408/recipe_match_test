@@ -15,7 +15,7 @@ body {
 	align-items: center;
 	flex-direction: column;
 	display: flex;
-	background: rgb(49, 141, 155);
+	/* background: rgb(49, 141, 155); */
 	/* background: linear-gradient(to bottom, #0f0c29,#302b63,#24243e); */
 	
   --s: 55px; /* control the size */

@@ -66,7 +66,7 @@ const handleLogOut = (e) =>{
     const auth = getAuth();
     signOut(auth).then(() => {
         console.log("te ai deconectat")
-        navigate('/login');
+        navigate('/');
       }).catch((error) => {
         // An error happened.
       })

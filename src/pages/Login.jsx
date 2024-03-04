@@ -112,6 +112,7 @@ const Login = () => {
     const logGoogleUser = async () => {
       const response = await signInWithGooglePopup();
       console.log(response);
+      navigate('/home')
   }
    
             

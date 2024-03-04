@@ -41,7 +41,7 @@ export default function Home(){
     const auth = getAuth();
     signOut(auth).then(() => {
         console.log("te ai deconectat")
-        navigate('/login');
+        navigate('/');
       }).catch((error) => {
         // An error happened.
       })
@@ -495,7 +495,7 @@ useEffect(() =>{
                     <div className="user-info">
                     <button onClick={() => setPopupActive(!popupActive)} class="add--recipe" >Adauga reteta
                     </button>
-                      <span className="username">Bianca{user.displayName}</span>
+                      <span className="username">{user.displayName}</span>
                       <span className="email">{user.email}</span>
 
                     </div>
