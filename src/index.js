@@ -17,8 +17,8 @@ import Profile from './pages/profile';
 ReactDOM.render(
   <BrowserRouter>
     <Routes>
-      <Route index path='/' element={<Home />}></Route>
-      <Route index path='/login' element={<Login />}></Route>
+      <Route index path='/' element={<Login />}></Route>
+      <Route index path='/acasa' element={<Home />}></Route>
 
       
       <Route index path='/profile' element={<Profile />}></Route>
