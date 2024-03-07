@@ -18,13 +18,13 @@ import { auth } from "../firebase.js";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
+import { database } from "../firebase.js";
+import RecipeCard from 'react-tinder-card';
 
-// import RecipeCard from 'react-tinder-card';
-import { database } from '../firebase';
 import { collection, doc, getDocs } from 'firebase/firestore';
 
 async function fetchDataFromFirestore(){
-const querySnapshot = await getDocs(collection(database, "retete"));
+const querySnapshot = await getDocs(collection(database, "retete_utilizator"));
 const data =[];
 querySnapshot.forEach((doc) => {
   // doc.data() is never undefined for query doc snapshots
@@ -231,7 +231,7 @@ const errorMessage = error.message;
 
                 <div class="container">
          
-            {/* <div className='cardContainer' >
+            <div className='cardContainer' >
             {recipes.map((reteta) => (
                 <RecipeCard 
                     className="swipe"
@@ -247,7 +247,7 @@ const errorMessage = error.message;
         <div className="swipeButtons">
         <box-icon  type='solid' name='heart'></box-icon>
         <box-icon  type='solid' name='heart'></box-icon>
-     </div> */}
+     </div>
     <div>Conectat ca: {user?.email}</div>
       </div>
                 </div>
