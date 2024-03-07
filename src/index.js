@@ -10,6 +10,7 @@ import Home from './pages/home';
 import Login from './pages/Login'
 
 import Profile from './pages/profile';
+import  Chat  from './pages/Chat';
 
 
 
@@ -19,7 +20,7 @@ ReactDOM.render(
     <Routes>
       <Route index path='/' element={<Login />}></Route>
       <Route index path='/home' element={<Home />}></Route>
-
+      <Route index path='/chat' element={<Chat />}></Route>
       
       <Route index path='/profile' element={<Profile />}></Route>
      

@@ -13,21 +13,31 @@ import { auth } from "../firebase.js";
 import { storage } from "../firebase.js";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { db } from "../firebase.js";
 import { database } from "../firebase.js";
 import {  ref as ref2, set , onValue} from "firebase/database";
 import Login from "./Login.jsx";
-
+import {v4} from "uuid";
 import {
   collection,
   onSnapshot,
   doc,
   addDoc,
-  deleteDoc
+  deleteDoc,
+  getDoc,
+  query,
+  where,
+  getDocs
 } from "firebase/firestore"
 
-
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  listAll,
+  list,
+} from "firebase/storage";
+import Modal from "../components/Modal.js";
 
 
 
@@ -99,7 +109,28 @@ export default function Home(){
       const [image, setImage] = useState('null');
       const [loading, setLoading] = useState('false');
       const [photoURL, setUrl]=useState(profile);
+      const [imageURL, setImageURL]=useState([]);
 
+// INPUT IMAGINE PENTRU RETETE//
+const imagesListRef = ref(storage, "retete/");
+const uploadFile = () => {
+  if (image == null) return;
+  const imageRef = ref(storage, `retete/${image.name + v4()}`);
+  uploadBytes(imageRef, image).then((snapshot) => {
+    getDownloadURL(snapshot.ref).then((url) => {
+      setImageURL((prev) => [...prev, url]);
+    });
+  });
+};
+useEffect(() => {
+  listAll(imagesListRef).then((response) => {
+    response.items.forEach((item) => {
+      getDownloadURL(item).then((url) => {
+        setImageURL((prev) => [...prev, url]);
+      });
+    });
+  });
+}, []);
 //INPUT FILE PT POZA PROFIL//
       const handleChange= (e) => {
         if(e.target.files[0]){
@@ -170,6 +201,7 @@ useEffect(() =>{
       })
       setRecipes(recipesClone)
     }
+    
     const handleSubmit = e => {
       e.preventDefault()
   
@@ -235,12 +267,34 @@ useEffect(() =>{
       })
     }
     const setAuth = () => {
-    setForm({...form, utilizator: user.displayName}
+    setForm({...form, utilizator: user.uid}
     )}
   
     const removeRecipe = id => {
       deleteDoc(doc(database, "retete_utilizator", id))
     }
+  //POPUP PENTRU STERGERE RETETA//
+    
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [recipeIdToRemove, setRecipeIdToRemove] = useState(null);
+    
+  
+    const handleRemove = (id) => {
+      setIsModalOpen(true);
+      setRecipeIdToRemove(id);
+    };
+  
+    const handleConfirmRemove = () => {
+      removeRecipe(recipeIdToRemove);
+      setIsModalOpen(false);
+    };
+  
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+      setRecipeIdToRemove(null);
+    };
+    
+  
     return( 
         <div>
           {/* DACA USERUL NU ESTE LOGAT -  LOGIN PAGE */}
@@ -281,7 +335,7 @@ useEffect(() =>{
                             </Link>
                         </li>
                         <li className="nav-link">
-                        <Link to='/profile'>
+                        <Link to='/chat'>
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Grupuri
@@ -342,35 +396,56 @@ useEffect(() =>{
             <div className="header--wrapper">
 
           <h2>Retetele mele</h2>
-        <div className="recipes">
-          {recipes.map((recipe, i  )=> (
-            <div className="recipe" key={recipe.id}>
-             <img className="img_recipe" src={recipe.imagine}></img> 
-             <h4>Postat de {recipe.utilizator}</h4>
-             <h3>{recipe.titlu}</h3>
-              <p dangerouslySetInnerHTML={{__html: recipe.descriere}}></p>
+          <div className="recipes">
+  {recipes.map((recipe) => {
+    // Verifică dacă utilizatorul din rețetă este același cu utilizatorul curent
+    if (recipe.utilizator === user.uid) {
+      return (
+        <div className="recipe" key={recipe.id}>
+          {/* Restul codului */}
+          <h4>Postat de {recipe.utilizator}</h4>
+          <h3>{recipe.titlu}</h3>
+          <p dangerouslySetInnerHTML={{ __html: recipe.descriere }}></p>
 
-             {recipe.viewing && <div>
-                <h4>Ingrediente</h4>
-                <ul>
-                  {recipe.ingrediente.map((ingredient, i) => (
-                    <li key={i}>{ingredient}</li>
-                  ))}
-                </ul>
-                <h4>Instructiuni</h4>
-                <ol>
-                  {recipe.instructiuni.map((step, i) => (
-                    <li key={i}>{step}</li>
-                  ))}
-                </ol>
-                
-              </div>}
-              <div className="buttons">
-              <button onClick={() => handleView(recipe.id)}>View { recipe.viewing ? 'less': 'more'}</button>
-              <button className="remove" onClick={() => removeRecipe(recipe.id)}>Remove</button>
-              </div></div>
-          ))}
+          {recipe.viewing && (
+            <div>
+              <h4>Ingrediente</h4>
+              <ul>
+                {recipe.ingrediente.map((ingredient, i) => (
+                  <li key={i}>{ingredient}</li>
+                ))}
+              </ul>
+              <h4>Instructiuni</h4>
+              <ol>
+                {recipe.instructiuni.map((step, i) => (
+                  <li key={i}>{step}</li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          <div className="buttons">
+            <button onClick={() =>  handleView(recipe.id)}>
+              Vezi {recipe.viewing ? 'mai putin' : 'mai mult'}
+            </button>
+            <button className="remove" onClick={() => handleRemove(recipe.id)}>
+              Sterge
+            </button>
+          </div>
+          {isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          onConfirm={handleConfirmRemove}
+          onClose={handleCloseModal}
+        />
+      )}
         </div>
+      );
+    }
+    return null; // Returnează null pentru a ignora rețetele care nu corespund condiției
+  })}
+</div>
+
        
        {popupActive && <div className="popup">
         <div className="popup-inner">
@@ -386,35 +461,14 @@ useEffect(() =>{
 </div>
 <div className="form-group">
   <label>Imagine</label>
-  <div className="file-upload">
-          {/* Ascundeți inputul real */}
-          <input
-            id="image-input" // Trebuie să fie aceeași cu id-ul "htmlFor" din label
-            type="file"
-            ref={inputFileRef}
-            value={form.imagine}
-            style={{ display: 'none' }}
-            onChange={e => setForm({...form, imagine: e.target.value})}
-          />
-          {/* Folosește o imagine sau alt element pentru a declanșa încărcarea */}
-          <label htmlFor="image-input"/>
-          <img
-            src={form.imagine}
-              alt="Incarca"
-            style={{
-              width: '100px',
-              height: '100px',
-              // borderRadius: '50%',
-              borderWidth: '5px',
-              backgroundColor: '#FFF',
-              borderColor: 'grey',
-              borderStyle: 'outset',
-                
-              
-            }}
-          />
-</div>
-
+  <input
+        type="file"
+        onChange={(event) => {
+          setImage(event.target.files[0]);
+        }}
+      />
+<button onClick={uploadFile}> Upload Image</button>
+     
 </div>
 <div className="form-group">
   <label>Descriere</label>
@@ -506,6 +560,7 @@ useEffect(() =>{
                       <br></br>
                       <span className="email">Email: {user.email}</span>
 <br></br>
+                      <span className="email">User id: {user.uid}</span>
                     </div>
                     </div>
                     

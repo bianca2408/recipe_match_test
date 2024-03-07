@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {auth} from '../firebase';
+import {auth, database} from '../firebase';
 
 import '../Login.css';
 
@@ -12,7 +12,7 @@ import { signInWithGooglePopup } from "../firebase";
 
     
   
-
+import { collection, doc, getDocs , addDoc, setDoc} from 'firebase/firestore';
 
 
 import { Link, Navigate, useNavigate } from 'react-router-dom';
@@ -34,31 +34,8 @@ const Login = () => {
 
    
 
-    const [isSigningIn, setisSigningIn] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-
-    // const [isSignUpActive, setIsSignUpActive] = useState(false);
-    // const handleMethodChange = () => {
-    //     setIsSignUpActive(!isSignUpActive);
-    // }
-
-    // const onSubmit = async (e) => {
-    //     e.preventDefault();
-    //     if(!isSigningIn) {
-    //         setisSigningIn(true)
-    //         await doSignInWithEmailAndPassword(email, password)
-    //     }
-    // }
-
-    // const onGoogleSignIn = async (e) => {
-    //     e.preventDefault();
-    //     if(!isSigningIn) {
-    //         setisSigningIn(true)
-    //         doSignInWithGoogle().catch(err => {
-    //             setisSigningIn(false)
-    //         })
-    //     }
-    // }
+   
+    
 
     const navigate = useNavigate();
     const handleSubmit = (e) =>{
@@ -68,11 +45,6 @@ const Login = () => {
         .then((userCredential) => {
         // Signed in 
 
-        const user1 = userCredential.user;
-
-        const user = userCredential.user;
-
-        console.log(user);
         navigate('/home');
      })
   .catch((error) => {
@@ -80,7 +52,7 @@ const Login = () => {
     const errorMessage = error.message;
   });
     }
-    const handleSubmitsignup = (e) =>{
+    const handleSubmitsignup =  (e) =>{
         e.preventDefault();
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, email, password)
@@ -88,7 +60,12 @@ const Login = () => {
       .then((userCredential) => {
     // Signed up 
     //SE MODIFICA USERNAME UL
-              const auth = getAuth();
+    const docRef =  setDoc(doc(database, "utilizatori", userCredential.user.uid), {
+      nume_utilizator: username,
+      email: email,    
+    });
+        
+              
               sendEmailVerification(auth.currentUser)
    .then(() => {
     console.log("email trimis")

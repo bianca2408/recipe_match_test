@@ -164,7 +164,7 @@ const errorMessage = error.message;
                             </Link>
                         </li>
                         <li className="nav-link">
-                        <Link to='/profile'>
+                        <Link to='/chat'>
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Grupuri
@@ -269,7 +269,7 @@ const errorMessage = error.message;
             
 
                     <div className="header--title">
-                        {/* <span>asdad</span> */}
+                       
                     </div>
 
                 
