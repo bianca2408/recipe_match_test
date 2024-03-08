@@ -413,7 +413,10 @@ useEffect(() => {
             <div  className="main--content">
             <div className="header--wrapper">
 
-          <h2>Retetele mele</h2>
+            <h2 style={{textAlign: 'center', fontFamily: 'Playfair Display, serif', fontSize: '2rem', color: '#fff', textDecoration: 'underline', marginTop: '20px'}}>Retetele mele</h2>
+
+
+
           <div className="recipes">
   {recipes.map((recipe) => {
     // Verifică dacă utilizatorul din rețetă este același cu utilizatorul curent
@@ -423,13 +426,15 @@ useEffect(() => {
         <div className="recipe" key={recipe.id}>
           
           {/* <h4>Postat de {recipe.utilizator}</h4> */}
-          <h3>{recipe.titlu}</h3>
-          {recipe.imagine && <img src={recipe.imagine} alt={`Imagine pentru ${recipe.titlu}`} />}
           
-          <p dangerouslySetInnerHTML={{ __html: recipe.descriere }}></p>
+          {recipe.imagine && <img src={recipe.imagine} alt={`Imagine pentru ${recipe.titlu}`} />}
+          <h3>{recipe.titlu}</h3>
+          
 
           {recipe.viewing && (
             <div>
+              <h4>Descriere</h4>
+              <p dangerouslySetInnerHTML={{ __html: recipe.descriere }}></p>
               <h4>Ingrediente</h4>
               <ul>
                 {recipe.ingrediente.map((ingredient, i) => (
@@ -446,13 +451,18 @@ useEffect(() => {
           )}
 
           <div className="buttons">
+            
             <button onClick={() =>  handleView(recipe.id)}>
               Vezi {recipe.viewing ? 'mai putin' : 'mai mult'}
+            </button>
+            <div className="edit-delete-buttons">
+            <button >
+              Editeaza
             </button>
             <button className="remove" onClick={() => handleRemove(recipe.id)}>
               Sterge
             </button>
-          </div>
+          </div></div>
           {isModalOpen && (
         <Modal
           isOpen={isModalOpen}
@@ -484,13 +494,14 @@ useEffect(() => {
   <label>Imagine</label>
   <input
         type="file"
+        
         onChange={(event) => {
           setImage(event.target.files[0]);
-          // setForm({ ...form, imagine: event.target.files[0].name });
+          
         }}
       />
       
-{/* <button onClick={uploadFile}> Upload Image</button> */}
+
      
 </div>
 <div className="form-group">
