@@ -193,7 +193,7 @@ useEffect(() =>{
         !form.instructiuni 
         // !form.imagine
       ) {
-        alert("Please fill out all fields")
+        alert("Completati toate campurile")
         return
       }
   
@@ -413,7 +413,7 @@ useEffect(() => {
             <div  className="main--content">
             <div className="header--wrapper">
 
-            <h2 style={{textAlign: 'center', fontFamily: 'Playfair Display, serif', fontSize: '2rem', color: '#fff', textDecoration: 'underline', marginTop: '20px'}}>Retetele mele</h2>
+            <h2 style={{textAlign: 'center', fontFamily: 'Playfair Display, serif', fontSize: '2rem', color: '#fff', marginTop: '20px'}}>Retetele mele</h2>
 
 
 
@@ -455,7 +455,7 @@ useEffect(() => {
             <button onClick={() =>  handleView(recipe.id)}>
               Vezi {recipe.viewing ? 'mai putin' : 'mai mult'}
             </button>
-            <div className="edit-delete-buttons">
+            <div className="edit-delete-buttons" onClick={() => setPopupActive(!popupActive)}>
             <button >
               Editeaza
             </button>
@@ -480,7 +480,7 @@ useEffect(() => {
        
        {popupActive && <div className="popup">
         <div className="popup-inner">
-          <h2>Adauga o noua reteta</h2>
+        <h2 style={{textAlign: 'center', fontFamily: 'Playfair Display, serif', fontSize: '2rem', color: '#fff', marginTop: '20px'}}>Adauga o noua reteta</h2>
           <form onSubmit={handleSubmit}>
 
 <div className="form-group">
@@ -527,7 +527,7 @@ useEffect(() => {
 </div>
 
 <div className="form-group">
-  <label>Intructiuni</label>
+  <label>Instructiuni</label>
   {
     form.instructiuni.map((step, i) => (
       <textarea 
@@ -540,9 +540,9 @@ useEffect(() => {
   <button type="button" onClick={handleStepCount}>Adauga instructiune</button>
 </div>
 
-<div className="buttons">
+<div className="edit-delete-buttons">
   <button onClick={uploadFile} type="submit">Submit</button>
-  <button type="button" class="remove" onClick={() => setPopupActive(false)}>Close</button>
+  <button type="button"  onClick={() => setPopupActive(false)}>Close</button>
 </div>
 
 </form>

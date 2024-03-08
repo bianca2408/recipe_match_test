@@ -9,12 +9,14 @@
 :root{
   /* Colors */
   --body-color: #cd5c5c;
-  --sidebar--color: #FDE8CD;
-  --primary-color: #025955;
+  --sidebar--color: #d1f5de;
+  --primary-color: linear-gradient(315deg, #ffffff 0%, #a562e6 74%);
+ 
   --primary-color-light: #F6F5FF;
   --toggle-color: #DDD;
   --text-color: #707070;
-
+ 
+  
   --tran-02: all 0.2s ease;
   --tran-03: all 0.3s ease;
   --tran-04: all 0.4s ease;
@@ -24,7 +26,7 @@ body {
   height: 100vh;
   /* background: #E4E9F7; */
   
-  background: var(--body-color);
+  background: linear-gradient(110deg, #62e6a5 50%, #9ae7ba 50%, #9ae7ba 52%, #d1f5de 52%, #d1f5de 0);
   transition: var(--tran-05);
 }
 body.dark{
@@ -249,7 +251,7 @@ body.dark .switch::before{
 .main--content{
   position: absolute;
   top: 40px;
-  /* height: 100%; */
+  min-height: 100%;
   left: 300px;
   width: calc(100% - 300px);
   border-radius: 20px;
@@ -456,11 +458,11 @@ body.dark .switch::before{
 }
 .recipe img{
   position: relative;
-  
   width: 100%;
   height: 300px;
   object-fit: cover;
-  border: 10px solid var(--primary-color);
+  border: 8px solid #a562e6;
+  border-radius: 0.5rem;
 }
 h1 {
   font-size: 2.5rem;
@@ -476,11 +478,9 @@ button {
   border: none;
   outline: none;
   cursor: pointer;
-
   color: var(--primary-color);
   font-weight: bold;
   text-transform: uppercase;
-  
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   background-color: var(--body-color);
@@ -493,7 +493,11 @@ button {
   align-items: center;
   margin-top: 2rem;
 }
-
+.form-group input[type="file"] {
+  height: 40px; /* Asigură că input-ul de tip fișier ocupă întreaga lățime disponibilă */
+  margin-bottom: 12px; /* Poate adaugă și un spațiu mic între input-uri pentru a îmbunătăți aspectul */
+  resize: none;
+}
 .edit-delete-buttons {
   margin-top: 1rem;
   display: flex;
@@ -506,7 +510,7 @@ button {
 
 button.remove {
   color: var(--light);
-  background-color: red;
+  background-color: var(--body-color);
 }
 
 h4 {
@@ -537,7 +541,7 @@ li {
 }
 
 .popup-inner {
-  background-color: var(--primary-color);
+  background-color: #a562e6;
   padding: 1rem;
   border-radius: 0.5rem;
   width: 100%;
@@ -581,11 +585,23 @@ input, textarea {
     top: 0px;
     left: 0px;
     
-    
-    /* Alte stiluri pentru ecrane mici... */
   }
   .main--content{
     top: 0px;
-    left: 0px;
+    left: -80px;
+    width: 100%;
   }
+  .sidebar.close ~ .main--content{
+  
+    left: 88px;
+    width: calc(100% - 88px);
+    transition: var(--tran-04);
+  }
+  .header--wrapper{
+    width: 100%;
+  }
+  .profile--wrapper{
+    display: none;
+  }
+  
 }

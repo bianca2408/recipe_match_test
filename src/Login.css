@@ -8,15 +8,13 @@
 	font-family: "Poppins", sans-serif;
 }
 
-body {
+.blur-container{
 	
 	min-height: 100vh;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
 	display: flex;
-	/* background: rgb(49, 141, 155); */
-	/* background: linear-gradient(to bottom, #0f0c29,#302b63,#24243e); */
 	
   --s: 55px; /* control the size */
   --b: 15px; /* control the thickness of the curved lines */
@@ -32,15 +30,13 @@ body {
     radial-gradient(var(--_r) right var(--_g1)) calc(var(--_s)/-2) calc(-1*var(--s)),
     radial-gradient(var(--_r) left  var(--_g0)) calc(var(--_s)/ 2) var(--s),
     linear-gradient(90deg,#433520 50%,#00917C 0);
-  background-size: var(--_s) calc(4*var(--s));
-  /* -webkit-backdrop-filter: blur(5px); */
-  /* backdrop-filter: blur(5px); */
+    background-size: var(--_s) calc(4*var(--s));
+    backdrop-filter: blur(10px); /* adjust blur amount as needed */
+    
+    
 
 }
-.login_background{
-    background: inherit;
-    backdrop-filter: blur(5px);
-}
+
 .main{
 	width: 350px;
 	height: 500px;
@@ -89,7 +85,7 @@ button{
 	justify-content: center;
 	display: block;
 	color: #FDE8CD;
-	background: #00917C;
+	background: #E6A562;
 	font-size: 1em;
 	font-weight: bold;
 	margin-top: 20px;
@@ -125,7 +121,7 @@ button:hover{
 }
 
 /* BACKGROUND CSS */
-.area{
+/* .area{
      
     background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);  
     width: 100%;
@@ -229,7 +225,7 @@ button:hover{
     height: 150px;
     animation-delay: 0s;
     animation-duration: 11s;
-}
+} */
 
 
 

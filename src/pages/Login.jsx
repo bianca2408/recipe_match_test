@@ -102,7 +102,7 @@ const Login = () => {
  
     return(
 
-        <div >
+        <div className="blur-container">
             <div class="area" >
         <div class="main">
 {/* <div>curent user: {user?.email}</div> */}
