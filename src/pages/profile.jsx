@@ -111,26 +111,7 @@ export default function Home(){
       const [photoURL, setUrl]=useState(profile);
       const [imageURL, setImageURL]=useState([]);
 
-// INPUT IMAGINE PENTRU RETETE//
-const imagesListRef = ref(storage, "retete/");
-const uploadFile = () => {
-  if (image == null) return;
-  const imageRef = ref(storage, `retete/${image.name + v4()}`);
-  uploadBytes(imageRef, image).then((snapshot) => {
-    getDownloadURL(snapshot.ref).then((url) => {
-      setImageURL((prev) => [...prev, url]);
-    });
-  });
-};
-useEffect(() => {
-  listAll(imagesListRef).then((response) => {
-    response.items.forEach((item) => {
-      getDownloadURL(item).then((url) => {
-        setImageURL((prev) => [...prev, url]);
-      });
-    });
-  });
-}, []);
+
 //INPUT FILE PT POZA PROFIL//
       const handleChange= (e) => {
         if(e.target.files[0]){
@@ -266,6 +247,43 @@ useEffect(() =>{
         instructiuni: [...form.instructiuni, ""]
       })
     }
+    // INPUT IMAGINE PENTRU RETETE//
+const imagesListRef = ref(storage, "retete/");
+const uploadFile = () => {
+  if (image == null) return;
+  setForm({...form, utilizator: user.uid}
+    )
+  const nume_imagine= v4();
+  console.log(nume_imagine)
+  const imageRef = ref(storage, `retete/${nume_imagine}`);
+  
+  uploadBytes(imageRef, image)
+    .then((snapshot) => {
+      getDownloadURL(snapshot.ref)
+        .then((url) => {
+          // Actualizăm state-ul local pentru a afișa imaginea
+          setImageURL((prev) => [...prev, url]);
+          setForm({ ...form, imagine: url });
+          
+          
+        })
+        .catch((error) => {
+          console.error('Eroare la obținerea URL-ului de descărcare:', error);
+        });
+    })
+    .catch((error) => {
+      console.error('Eroare la încărcarea imaginii:', error);
+    });
+};
+useEffect(() => {
+  listAll(imagesListRef).then((response) => {
+    response.items.forEach((item) => {
+      getDownloadURL(item).then((url) => {
+        setImageURL((prev) => [...prev, url]);
+      });
+    });
+  });
+}, []);
     const setAuth = () => {
     setForm({...form, utilizator: user.uid}
     )}
@@ -400,11 +418,14 @@ useEffect(() =>{
   {recipes.map((recipe) => {
     // Verifică dacă utilizatorul din rețetă este același cu utilizatorul curent
     if (recipe.utilizator === user.uid) {
+      
       return (
         <div className="recipe" key={recipe.id}>
-          {/* Restul codului */}
-          <h4>Postat de {recipe.utilizator}</h4>
+          
+          {/* <h4>Postat de {recipe.utilizator}</h4> */}
           <h3>{recipe.titlu}</h3>
+          {recipe.imagine && <img src={recipe.imagine} alt={`Imagine pentru ${recipe.titlu}`} />}
+          
           <p dangerouslySetInnerHTML={{ __html: recipe.descriere }}></p>
 
           {recipe.viewing && (
@@ -465,9 +486,11 @@ useEffect(() =>{
         type="file"
         onChange={(event) => {
           setImage(event.target.files[0]);
+          // setForm({ ...form, imagine: event.target.files[0].name });
         }}
       />
-<button onClick={uploadFile}> Upload Image</button>
+      
+{/* <button onClick={uploadFile}> Upload Image</button> */}
      
 </div>
 <div className="form-group">
@@ -507,7 +530,7 @@ useEffect(() =>{
 </div>
 
 <div className="buttons">
-  <button onClick={setAuth} type="submit">Submit</button>
+  <button onClick={uploadFile} type="submit">Submit</button>
   <button type="button" class="remove" onClick={() => setPopupActive(false)}>Close</button>
 </div>
 
