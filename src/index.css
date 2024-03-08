@@ -281,7 +281,7 @@ body.dark .switch::before{
   /* display: flex;
   justify-content: space-between;
   flex-wrap: wrap; */
-  left: 20px;
+  left: 0.5rem;
   /* height: 100%; */
   width: 65%;
   /* align-items: center; */
@@ -295,7 +295,7 @@ body.dark .switch::before{
   position: relative; 
   display: flex;
   justify-content: space-between;
-  left: 60px;
+  left: 4rem;
   height: 100%;
   width: 30%;
   border-radius: 20px;
@@ -584,12 +584,13 @@ input, textarea {
   .sidebar {
     top: 0px;
     left: 0px;
-    
+    border-radius: 0%;
   }
   .main--content{
     top: 0px;
     left: -80px;
     width: 100%;
+    border-radius: 0%;
   }
   .sidebar.close ~ .main--content{
   
@@ -599,6 +600,7 @@ input, textarea {
   }
   .header--wrapper{
     width: 100%;
+    border-radius: 0%;
   }
   .profile--wrapper{
     display: none;
