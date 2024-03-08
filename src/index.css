@@ -409,15 +409,13 @@ body.dark .switch::before{
 }
 .profile_image{
   position: absolute;
-  left: 50%;
+  left: 5rem;
   top: -50px;
   transform: translateX(-50%);
   width: 120px;
   height: 120px;
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 15px 50px rgba(0,0,0, 0.3);
-  overflow: hidden;
+  
+  
 }
 /* .card:hover .profile_image{
   width: 250px;
