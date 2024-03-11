@@ -27,7 +27,8 @@ import {
   getDoc,
   query,
   where,
-  getDocs
+  getDocs,
+  updateDoc
 } from "firebase/firestore"
 
 import {
@@ -197,7 +198,20 @@ useEffect(() =>{
         return
       }
   
-      addDoc(recipesCollectionRef, form)
+      if (editMode) {
+      // Modul de editare: actualizează rețeta existentă
+      if (image) {
+        // Dacă ai o imagine nouă, actualizează-o
+        uploadFile(editedRecipe.id);
+      } 
+        // Dacă nu ai o imagine nouă, actualizează doar rețeta existentă
+      updateRecipeInDatabase(editedRecipe.id, form);
+      
+     
+    } else {
+      // Modul de adăugare: adaugă rețeta nouă
+      addDoc(recipesCollectionRef, form);
+    }
   
       setForm({
         titlu: "",
@@ -208,7 +222,9 @@ useEffect(() =>{
         utilizator: ""
       })
   
-      setPopupActive(false)
+       setPopupActive(false);
+      setEditMode(false);
+      setEditedRecipe(null);
     }
   
     
@@ -249,12 +265,12 @@ useEffect(() =>{
     }
     // INPUT IMAGINE PENTRU RETETE//
 const imagesListRef = ref(storage, "retete/");
-const uploadFile = () => {
+const uploadFile = (recipeId) => {
   if (image == null) return;
   setForm({...form, utilizator: user.uid}
     )
   const nume_imagine= v4();
-  console.log(nume_imagine)
+console.log(nume_imagine)
   const imageRef = ref(storage, `retete/${nume_imagine}`);
   
   uploadBytes(imageRef, image)
@@ -264,7 +280,7 @@ const uploadFile = () => {
           // Actualizăm state-ul local pentru a afișa imaginea
           setImageURL((prev) => [...prev, url]);
           setForm({ ...form, imagine: url });
-          
+          updateRecipeInDatabase(recipeId, { imagine: url });
           
         })
         .catch((error) => {
@@ -291,6 +307,21 @@ useEffect(() => {
     const removeRecipe = id => {
       deleteDoc(doc(database, "retete_utilizator", id))
     }
+//UPDATE RETETE//
+  const updateRecipeInDatabase = async (recipeId, updatedData) => {
+  try {
+    // Referință la documentul specific retetei
+    const recipeDocRef = doc(recipesCollectionRef, recipeId);
+
+    // Actualizează documentul cu noile date
+    await updateDoc(recipeDocRef, updatedData);
+
+    console.log('Reteta a fost actualizată cu succes în baza de date!');
+  } catch (error) {
+    console.error('Eroare în actualizarea rețetei:', error.message);
+  }
+};
+
   //POPUP PENTRU STERGERE RETETA//
     
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -311,7 +342,23 @@ useEffect(() => {
       setIsModalOpen(false);
       setRecipeIdToRemove(null);
     };
-    
+// PENTRU EDITARE RETETA//
+const [editMode, setEditMode] = useState(false);
+  const [editedRecipe, setEditedRecipe] = useState(null);
+
+  const handleEditClick = (recipe) => {
+    setEditMode(true);
+    setEditedRecipe(recipe);
+    setPopupActive(true);
+    setForm({
+      titlu: recipe.titlu,
+      descriere: recipe.descriere,
+      ingrediente: [...recipe.ingrediente],
+      instructiuni: [...recipe.instructiuni],
+      imagine: recipe.imagine,
+      utilizator: recipe.utilizator,
+    });
+  };
   
     return( 
         <div>
@@ -455,8 +502,8 @@ useEffect(() => {
             <button onClick={() =>  handleView(recipe.id)}>
               Vezi {recipe.viewing ? 'mai putin' : 'mai mult'}
             </button>
-            <div className="edit-delete-buttons" onClick={() => setPopupActive(!popupActive)}>
-            <button >
+            <div className="edit-delete-buttons" >
+            <button onClick={() => handleEditClick(recipe)}>
               Editeaza
             </button>
             <button className="remove" onClick={() => handleRemove(recipe.id)}>
@@ -472,7 +519,12 @@ useEffect(() => {
       )}
         </div>
       );
+    
+    
+    
+    
     }
+
     return null; // Returnează null pentru a ignora rețetele care nu corespund condiției
   })}
 </div>
@@ -590,20 +642,21 @@ useEffect(() => {
                     <button onClick={() => setPopupActive(!popupActive)} class="add--recipe" >Adauga reteta
                     </button>
                     <br></br>
+                     
                       <span className="username">Nume: {user.displayName}</span>
                       <br></br>
                       <span className="email">Email: {user.email}</span>
 <br></br>
                       <span className="email">User id: {user.uid}</span>
                     </div>
-                    </div>
+                    
                     
                     
                     </div>
                         
                                
             </div>
-            
+            </div>
        </body> 
 	
        </div>

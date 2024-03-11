@@ -417,6 +417,7 @@ body.dark .switch::before{
   
   
 }
+
 /* .card:hover .profile_image{
   width: 250px;
   height: 250px;
@@ -577,6 +578,16 @@ input, textarea {
 .form-group button {
   margin-top: 1rem;
 }
+
+.user-info{
+  position: absolute;
+    margin: auto;
+   
+}
+
+
+
+
 /* //PAGINA PROFIL CSS// */
 @media screen and (max-width: 768px) {
   .sidebar {
