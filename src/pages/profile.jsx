@@ -37,6 +37,7 @@ import {
   getDownloadURL,
   listAll,
   list,
+  deleteObject,
 } from "firebase/storage";
 import Modal from "../components/Modal.js";
 
@@ -303,10 +304,32 @@ useEffect(() => {
     const setAuth = () => {
     setForm({...form, utilizator: user.uid}
     )}
-  
-    const removeRecipe = id => {
-      deleteDoc(doc(database, "retete_utilizator", id))
-    }
+    const deleteImageFromStorage = async (imageUrl) => {
+      try {
+        const storageRef = ref(storage, imageUrl);
+        await deleteObject(storageRef);
+        console.log('Imaginea a fost ștearsă cu succes din Storage.');
+      } catch (error) {
+        console.error('Eroare la ștergerea imaginii din Storage:', error);
+      }
+    };
+    
+    const removeRecipe = async (id, imageUrl) => {
+      try {
+        // Șterge imaginea din Storage
+        if (imageUrl) {
+          await deleteImageFromStorage(imageUrl);
+        }
+    
+        // Șterge documentul din baza de date
+        await deleteDoc(doc(database, 'retete_utilizator', id));
+    
+        console.log('Rețeta și imaginea au fost șterse cu succes.');
+      } catch (error) {
+        console.error('Eroare la ștergerea rețetei și a imaginii:', error);
+      }
+    };
+    
 //UPDATE RETETE//
   const updateRecipeInDatabase = async (recipeId, updatedData) => {
   try {
@@ -334,9 +357,16 @@ useEffect(() => {
     };
   
     const handleConfirmRemove = () => {
-      removeRecipe(recipeIdToRemove);
+      const recipeToRemove = recipes.find(recipe => recipe.id === recipeIdToRemove);
+    
+      if (recipeToRemove) {
+        const imageUrlToDelete = recipeToRemove.imagine || null;
+        removeRecipe(recipeIdToRemove, imageUrlToDelete);
+      }
+    
       setIsModalOpen(false);
     };
+    
   
     const handleCloseModal = () => {
       setIsModalOpen(false);
@@ -359,7 +389,7 @@ const [editMode, setEditMode] = useState(false);
       utilizator: recipe.utilizator,
     });
   };
-  
+  //STERGERE RETETA//
     return( 
         <div>
           {/* DACA USERUL NU ESTE LOGAT -  LOGIN PAGE */}
