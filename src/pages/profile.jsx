@@ -403,7 +403,7 @@ const [editMode, setEditMode] = useState(false);
             <header>
                 <div className="image-text">
                     <span className="image">
-                        <img src={logo} alt="logo" />
+                    <Link to='/home'>  <img src={logo} alt="logo" /></Link>
                     </span>
                     <div class="text header-text">
                         <span className="name">RecipeMatch</span>

@@ -228,27 +228,27 @@ const errorMessage = error.message;
             <div  className="main--content">
                 <div className="header--wrapper">
 
-
+            <div>Conectat ca: {user?.email}</div>
                 <div class="container">
          
             <div className='cardContainer' >
             {recipes.map((reteta) => (
                 <RecipeCard 
                     className="swipe"
-                    key={reteta.nume_reteta}
+                    key={reteta.id}
                     preventSwipe={['up', 'down']}
                 >
-                    <div className='card' style={{ backgroundImage: `url(${reteta.url})` }} >
-                        <h3>{reteta.nume_reteta}</h3>
+                    <div className='card' style={{ backgroundImage: `url(${reteta.imagine})` }} >
+                        <h3>{reteta.titlu}</h3>
                     </div>
                 </RecipeCard>
             ))}
         </div>
-        <div className="swipeButtons">
+        {/* <div className="swipeButtons">
         <box-icon  type='solid' name='heart'></box-icon>
         <box-icon  type='solid' name='heart'></box-icon>
-     </div>
-    <div>Conectat ca: {user?.email}</div>
+     </div> */}
+    
       </div>
                 </div>
                 
