@@ -54,7 +54,6 @@ export default function Home(){
         fetchData();
     },[]); //run once when the component loads and never again
     
-    
 const handleLogOut = (e) =>{
 
     e.preventDefault();
