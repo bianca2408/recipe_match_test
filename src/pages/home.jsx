@@ -3,7 +3,7 @@ import React , {useEffect, useState, Component} from "react";
 
 
 import {Link, useNavigate} from "react-router-dom";
-import 'boxicons';
+
 import '../index.css';
 import '../index.js';
 
