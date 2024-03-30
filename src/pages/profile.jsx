@@ -53,6 +53,7 @@ export default function Home(){
     const auth = getAuth();
     signOut(auth).then(() => {
         console.log("te ai deconectat")
+        localStorage.removeItem("userUid");
         navigate('/');
       }).catch((error) => {
         // An error happened.
@@ -120,7 +121,6 @@ export default function Home(){
             setImage(e.target.files[0])
         }
       }
-//BUTON DE INCARCARE A POZEI DE PROFIL//
 
   const submitData = ()=>{
 
@@ -139,6 +139,37 @@ console.log(error.message)
   console.log(error.message);
 });
 }
+//UPLOAD IMAGINE RETETA IN FORM//
+const [imageUploaded, setImageUploaded] = useState(false);
+
+const handleImageUpload = () => {
+  if (image == null) return;
+  const nume_imagine = v4();
+  const imageRef = ref(storage, `retete/${nume_imagine}`);
+  
+  uploadBytes(imageRef, image)
+    .then((snapshot) => {
+      getDownloadURL(snapshot.ref)
+        .then((url) => {
+          // Actualizăm state-ul local pentru a afișa imaginea
+          setForm({ ...form, imagine: url });
+          console.log(url);
+          setImageURL((prev) => [...prev, url]);
+          // Actualizăm starea pentru a indica că imaginea a fost încărcată
+          setImageUploaded(true);
+        })
+        .catch((error) => {
+          console.error('Eroare la obținerea URL-ului de descărcare:', error);
+        });
+    })
+    .catch((error) => {
+      console.error('Eroare la încărcarea imaginii:', error);
+    });
+};
+
+
+
+
 useEffect(() =>{
   if(user && user.photoURL){
     setUrl(user.photoURL);
@@ -214,6 +245,12 @@ useEffect(() =>{
       addDoc(recipesCollectionRef, form);
     }
   
+     
+  
+      setPopupActive(false);
+      setEditMode(false);
+      setEditedRecipe(null);
+    
       setForm({
         titlu: "",
         descriere: "",
@@ -222,10 +259,6 @@ useEffect(() =>{
         imagine: "",
         utilizator: ""
       })
-  
-       setPopupActive(false);
-      setEditMode(false);
-      setEditedRecipe(null);
     }
   
     
@@ -264,14 +297,30 @@ useEffect(() =>{
         instructiuni: [...form.instructiuni, ""]
       })
     }
+  
+    //RESET FORM//
+    const [imageButtonState, setImageButtonState] = useState({
+  text: "Incarca imaginea",
+  color: "green"
+});
+
+const resetForm = () => {
+  setForm({
+    titlu: "",
+    descriere: "",
+    ingrediente: [],
+    instructiuni: [],
+    imagine: "",
+    utilizator: user.uid
+  });
+};
     // INPUT IMAGINE PENTRU RETETE//
 const imagesListRef = ref(storage, "retete/");
 const uploadFile = (recipeId) => {
   if (image == null) return;
-  setForm({...form, utilizator: user.uid}
-    )
+  setForm({...form, utilizator: user.uid})
   const nume_imagine= v4();
-console.log(nume_imagine)
+  console.log(nume_imagine)
   const imageRef = ref(storage, `retete/${nume_imagine}`);
   
   uploadBytes(imageRef, image)
@@ -279,8 +328,11 @@ console.log(nume_imagine)
       getDownloadURL(snapshot.ref)
         .then((url) => {
           // Actualizăm state-ul local pentru a afișa imaginea
-          setImageURL((prev) => [...prev, url]);
           setForm({ ...form, imagine: url });
+          console.log(url)
+          setImageURL((prev) => [...prev, url]);
+          
+          
           updateRecipeInDatabase(recipeId, { imagine: url });
           
         })
@@ -389,7 +441,29 @@ const [editMode, setEditMode] = useState(false);
       utilizator: recipe.utilizator,
     });
   };
-  //STERGERE RETETA//
+  const userUid = localStorage.getItem("userUid");
+  const docRef = doc(database, "utilizatori", userUid);
+
+// Obținerea datelor din document
+getDoc(docRef)
+  .then((docSnapshot) => {
+    if (docSnapshot.exists()) {
+      const userData = docSnapshot.data();
+      const numeUtilizator = userData.nume_utilizator;
+      const emailUtilizator = userData.email;
+      const userId = userUid;
+
+      // Actualizarea conținutului elementelor <span> cu clasele corespunzătoare
+      document.querySelector('.username').innerText = `Nume: ${numeUtilizator}`;
+      document.querySelector('.email').innerText = `Email: ${emailUtilizator}`;
+      document.querySelector('.user-id').innerText = `User id: ${userId}`;
+    } else {
+      console.log("Documentul utilizatorului nu există.");
+    }
+  })
+  .catch((error) => {
+    console.error("Eroare la obținerea datelor utilizatorului:", error);
+  });
     return( 
         <div>
           {/* DACA USERUL NU ESTE LOGAT -  LOGIN PAGE */}
@@ -565,6 +639,7 @@ const [editMode, setEditMode] = useState(false);
         <h2 style={{textAlign: 'center', fontFamily: 'Playfair Display, serif', fontSize: '2rem', color: '#fff', marginTop: '20px'}}>Adauga o noua reteta</h2>
           <form onSubmit={handleSubmit}>
 
+
 <div className="form-group">
   <label>Titlu</label>
   <input 
@@ -576,15 +651,16 @@ const [editMode, setEditMode] = useState(false);
   <label>Imagine</label>
   <input
         type="file"
-        
         onChange={(event) => {
           setImage(event.target.files[0]);
           
         }}
       />
-      
+     <button type="button" onClick={handleImageUpload}>
+    {imageUploaded ? 'Imagine încărcată' : 'Încarcă imaginea'}
+  </button>
 
-     
+
 </div>
 <div className="form-group">
   <label>Descriere</label>
@@ -624,7 +700,7 @@ const [editMode, setEditMode] = useState(false);
 
 <div className="edit-delete-buttons">
   <button onClick={uploadFile} type="submit">Submit</button>
-  <button type="button"  onClick={() => setPopupActive(false)}>Close</button>
+  <button type="button" onClick={() => {setPopupActive(false); resetForm()}}>Close</button>
 </div>
 
 </form>
@@ -673,11 +749,11 @@ const [editMode, setEditMode] = useState(false);
                     </button>
                     <br></br>
                      
-                      <span className="username">Nume: {user.displayName}</span>
+                      <span className="username">Nume: </span>
                       <br></br>
-                      <span className="email">Email: {user.email}</span>
-<br></br>
-                      <span className="email">User id: {user.uid}</span>
+                      <span className="email">Email: </span>
+                    <br></br>
+                      <span className="user-id">User id: </span>
                     </div>
                     
                     

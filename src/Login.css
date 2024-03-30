@@ -15,24 +15,14 @@
 	align-items: center;
 	flex-direction: column;
 	display: flex;
-	
-  --s: 55px; /* control the size */
-  --b: 15px; /* control the thickness of the curved lines */
+    background: radial-gradient(1.5em 6.28571em at 1.95em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0) 55%) 0 0, radial-gradient(1.5em 6.28571em at -0.45em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0) 55%) 1.5em 5.5em, radial-gradient(2.3em 4.57143em at 2.99em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.3) 55%, rgba(255, 255, 255, 0) 55%) 0 0, radial-gradient(2.3em 4.57143em at -0.69em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.3) 55%, rgba(255, 255, 255, 0) 55%) 2.3em 4em, radial-gradient(3.5em 6.28571em at 4.55em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0) 55%) 0 0, radial-gradient(3.5em 6.28571em at -1.05em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0) 55%) 3.5em 5.5em, radial-gradient(#6361B5 20%,
+    #23ABA6 100%);
+  background-color: mediumspringgreen;
   
-  --_r: calc(1.28*var(--s) + var(--b)/2) at top 50%;
-  --_f: calc(99.5% - var(--b)),#FDE8CD calc(101% - var(--b)) 99.5%,#0000 101%;
-  --_g0: calc(-.8*var(--s)), #433520 var(--_f);
-  --_g1: calc(-.8*var(--s)), #00917C var(--_f);
-  --_s: calc(1.8*var(--s) + var(--b));
-  background: 
-    radial-gradient(var(--_r) right var(--_g0)) calc(-1*var(--_s)) var(--s),
-    radial-gradient(var(--_r) left  var(--_g1))         var(--_s)  calc(-1*var(--s)),
-    radial-gradient(var(--_r) right var(--_g1)) calc(var(--_s)/-2) calc(-1*var(--s)),
-    radial-gradient(var(--_r) left  var(--_g0)) calc(var(--_s)/ 2) var(--s),
-    linear-gradient(90deg,#433520 50%,#00917C 0);
-    background-size: var(--_s) calc(4*var(--s));
-    backdrop-filter: blur(10px); /* adjust blur amount as needed */
-    
+  background-size: 1.5em 11em, 1.5em 11em, 2.3em 8em, 2.3em 8em, 3.5em 11em, 3.5em 11em, 100% 100%;
+  background-repeat: repeat;
+  backdrop-filter: blur(10px);
+
     
 
 }
@@ -43,7 +33,7 @@
 	
 	overflow: hidden;
 	
-	background: #025955;
+	background: #6361B5;
 	border-radius: 10px;
 	box-shadow: 5px 20px 50px #000;
 }
@@ -85,7 +75,7 @@ button{
 	justify-content: center;
 	display: block;
 	color: #FDE8CD;
-	background: #E6A562;
+	background: #23ABA6;
 	font-size: 1em;
 	font-weight: bold;
 	margin-top: 20px;
@@ -100,7 +90,7 @@ button:hover{
 }
 .login{
 	height: 460px;
-	background: #433520;
+	background: #63C9BE;
 	border-radius: 60% / 10%;
 	transform: translateY(-180px);
 	transition: .8s ease-in-out;
@@ -118,6 +108,12 @@ button:hover{
 }
 #chk:checked ~ .signup label{
 	transform: scale(.6);
+}
+.error-message {
+    font-size: 10px; /* Ajustați dimensiunea textului după preferințele dvs. */
+    color: red; /* Sau orice altă culoare doriți */
+    margin-top: 0px; /* Ajustați spațiul de deasupra al textului de eroare */
+    text-align: center;
 }
 
 /* BACKGROUND CSS */

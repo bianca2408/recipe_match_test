@@ -10,7 +10,7 @@ import Home from './pages/home';
 import Login from './pages/Login'
 
 import Profile from './pages/profile';
-import  Chat  from './pages/Chat';
+import  Chat  from './pages/Cards';
 
 
 

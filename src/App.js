@@ -9,14 +9,16 @@ import Home from "./pages/home.jsx";
 import Login from "./pages/Login.jsx";
 
 
-
 function App() {
+  
   return (
-     <div>
-      <Login />
+     
+     
+          <div> <Login /></div>
       
+     
         
-   </div>
+   
    
 
    

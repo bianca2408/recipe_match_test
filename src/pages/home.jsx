@@ -1,11 +1,14 @@
 
-import React , {useEffect, useState} from "react";
+import React , {useEffect, useState, Component} from "react";
 
 
 import {Link, useNavigate} from "react-router-dom";
 import 'boxicons';
 import '../index.css';
 import '../index.js';
+
+import Button from '../components/Button';
+import Card from '../components/Card'
 
 
 
@@ -14,27 +17,22 @@ import profile from '../assets/profile.png';
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase.js";
 
-
+import Chat from './Cards.jsx'
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import { database } from "../firebase.js";
-import RecipeCard from 'react-tinder-card';
-
 import { collection, doc, getDocs } from 'firebase/firestore';
 
 async function fetchDataFromFirestore(){
 const querySnapshot = await getDocs(collection(database, "retete_utilizator"));
 const data =[];
 querySnapshot.forEach((doc) => {
-  // doc.data() is never undefined for query doc snapshots
+  
   data.push({id: doc.id, ...doc.data()})
 });
 return data;
 }
-
-
-
 
     
 
@@ -45,12 +43,9 @@ export default function Home(){
 
     const navigate = useNavigate();
     const user = auth.currentUser;
-    const [recipes, setRecipes] = useState([
-      
-    ]);
-   
-    
- 
+    const [recipes, setRecipes] = useState([]);
+  
+
     useEffect(() => {
         async function fetchData() {
             const data = await fetchDataFromFirestore();
@@ -66,6 +61,7 @@ const handleLogOut = (e) =>{
     const auth = getAuth();
     signOut(auth).then(() => {
         console.log("te ai deconectat")
+        localStorage.removeItem("userUid");
         navigate('/');
       }).catch((error) => {
         // An error happened.
@@ -99,6 +95,7 @@ const errorMessage = error.message;
             modeText.innerText = "Intunecat";
           }
         });
+        
     
         // Cleanup (remove the event listeners) when the component unmounts
         return () => {
@@ -123,8 +120,7 @@ const errorMessage = error.message;
      
       }, []); // Empty dependency array ensures that the effect runs once after the initial render
       
-      
-
+  
      
     
     
@@ -133,6 +129,7 @@ const errorMessage = error.message;
         <div>
             
             <body >
+            
             <nav className="sidebar close">
             <header>
                 <div className="image-text">
@@ -144,7 +141,13 @@ const errorMessage = error.message;
 
                     </div>
                 </div>
-                <box-icon name='chevron-right' class="chevron-right toggle"></box-icon>
+                {/* <input type="checkbox" id="check"/>
+            <label for="check">
+             <i class="fas fa-bars" id="btn"></i>
+             <i class="fas fa-times" id="cancel"></i>
+            </label> */}
+                <box-icon name='chevron-right' class="chevron-right toggle" ></box-icon>
+
             </header>
             <div className="menu-bar">
                 <div className="menu">
@@ -231,23 +234,12 @@ const errorMessage = error.message;
             <div>Conectat ca: {user?.email}</div>
                 <div class="container">
          
-            <div className='cardContainer' >
-            {recipes.map((reteta) => (
-                <RecipeCard 
-                    className="swipe"
-                    key={reteta.id}
-                    preventSwipe={['up', 'down']}
-                >
-                    <div className='card' style={{ backgroundImage: `url(${reteta.imagine})` }} >
-                        <h3>{reteta.titlu}</h3>
-                    </div>
-                </RecipeCard>
-            ))}
-        </div>
-        {/* <div className="swipeButtons">
-        <box-icon  type='solid' name='heart'></box-icon>
-        <box-icon  type='solid' name='heart'></box-icon>
-     </div> */}
+         
+
+        <Chat />
+
+              
+       
     
       </div>
                 </div>
