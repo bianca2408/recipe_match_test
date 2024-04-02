@@ -157,7 +157,7 @@ const Card = ({ id, image, color, title, removeCard, onSwipe }) => {
     );
 };
 
-const Chat = () => {
+const Cards = () => {
     const [cards, setCards] = useState([]);
 
     useEffect(() => {
@@ -222,4 +222,4 @@ const moveRight = () => {
   );
 };
 
-export default Chat;
+export default Cards;

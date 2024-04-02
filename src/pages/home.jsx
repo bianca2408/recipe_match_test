@@ -9,7 +9,7 @@ import '../index.js';
 
 import Button from '../components/Button';
 import Card from '../components/Card'
-
+import Test from './test'
 
 
 import logo from '../assets/logo.png';
@@ -17,7 +17,7 @@ import profile from '../assets/profile.png';
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase.js";
 
-import Chat from './Cards.jsx'
+import Cards from './Cards.jsx'
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -235,7 +235,7 @@ const errorMessage = error.message;
          
          
 
-        <Chat />
+        <Cards />
 
               
        
@@ -252,8 +252,8 @@ const errorMessage = error.message;
                     </button>
                     <Link to='/profile'><img src={user?.photoURL || profile} /></Link>
                         
-                        
                         </div>
+                        <Test/>
                         
                        </div>        
             </div>

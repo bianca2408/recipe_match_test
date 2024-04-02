@@ -108,7 +108,22 @@ export default function Home(){
           });
         };
       }, []); // Empty dependency array ensures that the effect runs once after the initial render
-// PROFILE UPDATE // 
+//INGREDIENTE DROPDOWNBOX//
+const [ingrediente, setIngrediente] = useState([]);
+const [searchTerm, setSearchTerm] = useState(""); // 1. Adăugarea stării pentru termenul de căutare
+
+useEffect(() => {
+    async function fetchData() {
+        const data = await fetchDataFromFirestore();
+        setIngrediente(data);
+    }
+    fetchData();
+},[]); //run once when the component loads and never again
+
+
+
+
+      // PROFILE UPDATE // 
       const [image, setImage] = useState('null');
       const [loading, setLoading] = useState('false');
       const [photoURL, setUrl]=useState(profile);
@@ -285,6 +300,7 @@ useEffect(() =>{
     }
   
     const handleIngredientCount = () => {
+      
       setForm({
         ...form,
         ingrediente: [...form.ingrediente, ""]
@@ -464,6 +480,30 @@ getDoc(docRef)
   .catch((error) => {
     console.error("Eroare la obținerea datelor utilizatorului:", error);
   });
+  //INGREDIENTE PENTRU DROPBOX FORM//
+  async function fetchDataFromFirestore(){
+    const querySnapshot = await getDocs(collection(database, "ingrediente"));
+    const data =[];
+    querySnapshot.forEach((doc) => {
+        const ingredienteData = doc.data();
+        data.push({ id: doc.id, ...ingredienteData });
+    });
+    return data;
+}
+ // Funcție pentru eliminarea diacriticelor dintr-un text
+ function removeDiacritics(text) {
+  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+// Înlocuiți filtrarea din map cu această funcție pentru a face abstractie de diacritice
+const filteredIngredients = ingrediente.filter(ingredient =>
+  removeDiacritics(ingredient.id.toLowerCase()).includes(removeDiacritics(searchTerm.toLowerCase()))
+);
+
+// Înlocuiți evenimentul onChange al câmpului de căutare cu această funcție pentru a face abstractie de diacritice
+function handleSearch(event) {
+  setSearchTerm(removeDiacritics(event.target.value));
+}
     return( 
         <div>
           {/* DACA USERUL NU ESTE LOGAT -  LOGIN PAGE */}
@@ -674,11 +714,15 @@ getDoc(docRef)
   <label>Ingrediente</label>
   {
     form.ingrediente.map((ingredient, i) => (
-      <input 
-        type="text"
-        key={i}
-        value={ingredient} 
-        onChange={e => handleIngredient(e, i)} />
+      <div key={i}>
+      <select value={ingredient} onChange={(e) => handleIngredient(e, i)}>
+        <option value="">Alegeți un ingredient</option>
+        {filteredIngredients.map(ingrediente => (
+          <option key={ingrediente.id} value={ingrediente.nume_ingredient}>{ingrediente.nume_ingredient}</option>
+        ))}
+      </select>
+    </div>
+     
     ))
   }
   <button type="button" onClick={handleIngredientCount}>Adauga ingredient</button>

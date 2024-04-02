@@ -29,7 +29,7 @@
 
 .main{
 	width: 350px;
-	height: 500px;
+	height: 550px;
 	
 	overflow: hidden;
 	
@@ -57,11 +57,11 @@ label{
 }
 input{
 	width: 60%;
-	height: 20px;
+	height: 20%;
 	background: #FDE8CD;
 	justify-content: center;
 	display: flex;
-	margin: 20px auto;
+	margin: 10px auto;
 	padding: 10px;
 	border: none;
 	outline: none;
@@ -89,7 +89,7 @@ button:hover{
 	background: #707070;
 }
 .login{
-	height: 460px;
+	height: 500px;
 	background: #63C9BE;
 	border-radius: 60% / 10%;
 	transform: translateY(-180px);
@@ -101,7 +101,7 @@ button:hover{
 
 }
 #chk:checked ~ .login{
-	transform: translateY(-500px);
+	transform: translateY(-600px);
 }
 #chk:checked ~ .login label{
 	transform: scale(1);
