@@ -8,8 +8,8 @@ const Modal = ({ isOpen, onClose, onConfirm }) => {
       <div className="modal-overlay">
         <div className="modal">
           <p>Sigur dorești să ștergi această rețetă?</p>
-          <button onClick={onConfirm}>Da</button>
-          <button onClick={onClose}>Nu</button>
+          <button className='buton-modal' onClick={onConfirm}>Da</button>
+          <button className='buton-modal' onClick={onClose}>Nu</button>
         </div>
       </div>
     )

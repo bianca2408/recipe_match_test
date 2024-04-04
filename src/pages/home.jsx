@@ -230,21 +230,13 @@ const errorMessage = error.message;
             <div  className="main--content">
                 <div className="header--wrapper">
 
-            <div>Conectat ca: {user?.email}</div>
-                <div class="container">
-         
-         
-
-        <Cards />
-
-              
-       
-    
-      </div>
-                </div>
+            {/* <div>Conectat ca: {user?.email}</div> */}
+               
+                {/* <Cards /> */}
+                <evil-tinder></evil-tinder>
+           </div>
                 
                 
-                {/* <p>{user.email}</p> */}
                 <div className="profile--wrapper">
                     <div className="profile--bar">
                     
