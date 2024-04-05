@@ -320,14 +320,8 @@ body.dark .switch::before{
 
 .header--wrapper{
   position: relative;
-  /* display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap; */
   left: 0.5rem;
-  /* height: 100%; */
   width: 65%;
-  /* align-items: center; */
-  
   border-radius: 20px;
   background: rgba(255,255,255, .2);
   box-shadow: 0 5px 15px rgba(0,0,0, .5);
@@ -748,7 +742,6 @@ textarea {
  
   .main--content{
     top: 0px;
-
     width: 100%;
     border-radius: 0%;
     transform: translateX(-10%);

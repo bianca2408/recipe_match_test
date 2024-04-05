@@ -539,21 +539,21 @@ function handleSearch(event) {
                         <Link to='/profile'>
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
-                                    Retete
+                                    Retetele mele
                                 </span>
                             </Link>
                         </li>
                         <li className="nav-link">
                         <Link to='/chat'>
-                                <box-icon name='food-menu' class="icon"></box-icon>
+                                <box-icon name='chat' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Grupuri
                                 </span>
                             </Link>
                         </li>
                         <li className="nav-link">
-                        <Link to='/profile'>
-                                <box-icon name='food-menu' class="icon"></box-icon>
+                        <Link to='/favorite'>
+                        <box-icon name='star' class='icon'></box-icon>
                                 <span className="text nav-text">
                                     Favorite
                                 </span>
@@ -561,7 +561,7 @@ function handleSearch(event) {
                         </li>
                         <li className="nav-link">
                         <Link to='/profile'>
-                                <box-icon name='food-menu' class="icon"></box-icon>
+                                <box-icon name='fridge' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Frigider
                                 </span>
@@ -569,7 +569,7 @@ function handleSearch(event) {
                         </li>
                         <li className="nav-link">
                         <Link to='/profile'>
-                                <box-icon name='food-menu' class="icon"></box-icon>
+                                <box-icon name='cog' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Setari
                                 </span>
@@ -604,7 +604,7 @@ function handleSearch(event) {
             <div  className="main--content">
             <div className="header--wrapper">
 
-            <h2 style={{textAlign: 'center', fontFamily: 'Playfair Display, serif', fontSize: '2rem', color: '#fff', marginTop: '20px'}}>Retetele mele</h2>
+            <h2 style={{ textAlign: 'center', fontFamily: 'Playfair Display, serif', fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '1px dotted lightgray' }}>Retetele mele</h2>
 
 
 

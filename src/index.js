@@ -11,7 +11,7 @@ import Login from './pages/Login'
 
 import Profile from './pages/profile';
 import  Cards  from './pages/Cards';
-import Test from './pages/test';
+import Favorite from './pages/favorite';
 
 
 
@@ -20,8 +20,8 @@ ReactDOM.render(
     <Routes>
       <Route index path='/' element={<Login />}></Route>
       <Route index path='/home' element={<Home />}></Route>
-      <Route index path='/chat' element={<Cards />}></Route>
-      <Route index path='/test' element={<Test />}></Route>
+      <Route index path='/favorite' element={<Favorite />}></Route>
+      
       <Route index path='/profile' element={<Profile />}></Route>
      
      

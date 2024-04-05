@@ -9,7 +9,7 @@ import '../index.js';
 
 import Button from '../components/Button';
 import Card from '../components/Card'
-import Test from './test'
+import Test from './filters.jsx'
 
 
 import logo from '../assets/logo.png';
@@ -133,7 +133,7 @@ const errorMessage = error.message;
             <header>
                 <div className="image-text">
                     <span className="image">
-                        <img src={logo} alt="logo" />
+                    <Link to='/home'>  <img src={logo} alt="logo" /></Link>
                     </span>
                     <div class="text header-text">
                         <span className="name">RecipeMatch</span>
@@ -161,21 +161,21 @@ const errorMessage = error.message;
                         <Link to='/profile'>
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
-                                    Retete
+                                    Retetele mele
                                 </span>
                             </Link>
                         </li>
                         <li className="nav-link">
                         <Link to='/chat'>
-                                <box-icon name='food-menu' class="icon"></box-icon>
+                                <box-icon name='chat' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Grupuri
                                 </span>
                             </Link>
                         </li>
                         <li className="nav-link">
-                        <Link to='/profile'>
-                                <box-icon name='food-menu' class="icon"></box-icon>
+                        <Link to='/favorite'>
+                        <box-icon name='star' class='icon'></box-icon>
                                 <span className="text nav-text">
                                     Favorite
                                 </span>
@@ -183,7 +183,7 @@ const errorMessage = error.message;
                         </li>
                         <li className="nav-link">
                         <Link to='/profile'>
-                                <box-icon name='food-menu' class="icon"></box-icon>
+                                <box-icon name='fridge' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Frigider
                                 </span>
@@ -191,7 +191,7 @@ const errorMessage = error.message;
                         </li>
                         <li className="nav-link">
                         <Link to='/profile'>
-                                <box-icon name='food-menu' class="icon"></box-icon>
+                                <box-icon name='cog' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Setari
                                 </span>

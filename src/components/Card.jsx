@@ -1,7 +1,7 @@
 import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
 
 import "../Card.css";
-import { collection, getDocs } from 'firebase/firestore';
+import { arrayUnion, collection, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import { database } from '../firebase';
 
 const userUid = localStorage.getItem("userUid");
@@ -24,13 +24,13 @@ async function fetchDataFromFirestore(){
         <div class="images">
           <div class="current" style="left: {{ this.howFarWeHaveMoved }}px">
             <img
-              alt="Current Profile Image"
-              src="{{ this.currentProfile.img }}"
+              alt="Current Card Image"
+              src="{{ this.currentCard.img }}"
               draggable="false"
             >
           </div>
           <div class="next">
-            <img alt="Next Profile Image" src="{{ this.nextProfile.img }}">
+            <img alt="Next Card Image" src="{{ this.nextCard.img }}">
           </div>
         </div>
     
@@ -42,23 +42,23 @@ async function fetchDataFromFirestore(){
     
       static props = {
         howFarWeHaveMoved: Number,
-        emptyProfile: {
+        emptyCard: {
           get default() {
             return {
               img: "https://stickwix.com/wp-content/uploads/2016/12/Stop-Sign-NH.jpg",
             };
           },
         },
-        profiles: {
+        cards: {
           get default() {
             return [];
           },
         },
-        get currentProfile() {
-          return this.profiles[0] || this.emptyProfile;
+        get currentCard() {
+          return this.cards[0] || this.emptyCard;
         },
-        get nextProfile() {
-          return this.profiles[1] || this.emptyProfile;
+        get nextCard() {
+          return this.cards[1] || this.emptyCard;
         },
         get liking() {
           return this.howFarWeHaveMoved >= 100;
@@ -72,7 +72,40 @@ async function fetchDataFromFirestore(){
         console.log("LIKED");
         this.removeCard();
         
-      }
+        // Obține referința către documentul utilizatorului curent
+        const userDocRef = doc(database, "utilizatori", userUid);
+    
+        // Actualizează câmpul 'favorite' al documentului utilizatorului curent
+        // pentru a adăuga ID-ul retetei respective
+        const recipeId = this.currentCard.id;
+    
+        // Citeste documentul utilizatorului pentru a obține datele existente
+        getDoc(userDocRef).then((doc) => {
+            if (doc.exists()) {
+                const userData = doc.data();
+    
+                // Obține array-ul existent 'favorite' sau creează un array gol dacă nu există
+                const favoriteArray = userData.favorite || [];
+    
+                // Adaugă ID-ul retetei în array-ul 'favorite'
+                favoriteArray.push(recipeId);
+    
+                // Actualizează întregul document cu noul array 'favorite', păstrând restul câmpurilor intacte
+                return setDoc(userDocRef, { ...userData, favorite: favoriteArray });
+            } else {
+                console.log("Documentul utilizatorului nu există!");
+            }
+        }).catch((error) => {
+            console.error("Eroare la citirea documentului utilizatorului:", error);
+        });
+    }
+    
+    
+    
+    
+    
+    
+    
     
       nope() {
         console.log("NOPED");
@@ -81,15 +114,16 @@ async function fetchDataFromFirestore(){
       }
     
       removeCard() {
-        const updatedProfiles = [...this.profiles];
-        updatedProfiles.shift(); // Eliminăm prima imagine din array
-        this.profiles = updatedProfiles;
+        const updatedCards = [...this.cards];
+        updatedCards.shift(); // Eliminăm prima imagine din array
+        this.cards = updatedCards;
       }
     
       async connected() {
         const data = await fetchDataFromFirestore();
-        this.profiles = data.map((profile) => ({
-          img: profile.imagine,
+        this.cards = data.map((card) => ({
+          img: card.imagine,
+          id: card.id
         }));
     
         var current = this.querySelector(".current");
