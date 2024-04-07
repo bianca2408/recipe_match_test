@@ -669,6 +669,10 @@ li {
   
   user-select: none;
 }
+.sidebar.close ~ .checkbox-wrapper-65 {
+  width: 50%;
+  
+}
 .checkbox-title {
   width: 100%;
   text-align: center;
@@ -752,6 +756,7 @@ textarea {
     width: calc(100% - 88px);
     transition: var(--tran-04);
   }
+  
   .header--wrapper{
     width: 100%;
     border-radius: 0%;

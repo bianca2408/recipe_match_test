@@ -22,20 +22,22 @@ import Cards from './Cards.jsx'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import { database } from "../firebase.js";
-import { collection, doc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDocs, getDoc } from 'firebase/firestore';
 
-async function fetchDataFromFirestore(){
-const querySnapshot = await getDocs(collection(database, "retete_utilizator"));
-const data =[];
-querySnapshot.forEach((doc) => {
-  
-  data.push({id: doc.id, ...doc.data()})
-});
-return data;
-}
 
     
-
+const userUid = localStorage.getItem("userUid");
+async function fetchDataFromFirestore(){
+    const querySnapshot = await getDocs(collection(database, "retete_utilizator"));
+    const data =[];
+    querySnapshot.forEach((doc) => {
+        const cardData = doc.data();
+        if (cardData.utilizator !== userUid) { // Excludem cardurile ale utilizatorului curent
+          data.push({ id: doc.id, ...cardData });
+      }
+    });
+    return data;
+    }
 
 
 
@@ -44,16 +46,32 @@ export default function Home(){
     const navigate = useNavigate();
     const user = auth.currentUser;
     const [recipes, setRecipes] = useState([]);
-  
+    const [filteredRecipes, setFilteredRecipes] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
             const data = await fetchDataFromFirestore();
             setRecipes(data);
+            setFilteredRecipes(data);
         }
         fetchData();
     },[]); //run once when the component loads and never again
-    
+    // function handleFilteredRecipes(filteredRecipes) {
+    //   setFilteredRecipes(filteredRecipes);
+    // }
+    // useEffect(() => {
+    //   const handleFilteredRecipes = (selectedIngredients) => {
+    //     const filteredRecipes = recipes.filter(recipe => {
+    //       return selectedIngredients.every(selectedIngredient => {
+    //         return recipe.ingrediente.includes(selectedIngredient);
+    //       });
+    //     });
+    //     setFilteredRecipes(filteredRecipes);
+    //   };
+  
+     
+    // }, [recipes]);
+
 const handleLogOut = (e) =>{
 
     e.preventDefault();
@@ -119,10 +137,19 @@ const errorMessage = error.message;
      
       }, []); // Empty dependency array ensures that the effect runs once after the initial render
       
+      const handleView = id =>{
+        const recipesClone = [...recipes]
   
-     
-    
-    
+        recipesClone.forEach(recipe => {
+          if(recipe.id === id){
+            recipe.viewing = !recipe.viewing
+          } else{
+            recipe.viewing = false
+          }
+        })
+        setRecipes(recipesClone)
+      }
+      
 
     return(
         <div>
@@ -234,6 +261,38 @@ const errorMessage = error.message;
                
                 {/* <Cards /> */}
                 <evil-tinder></evil-tinder>
+
+                <div className="recipes">
+              {filteredRecipes.map((recipe) => (
+                <div className="recipe" key={recipe.id}>
+                  {recipe.imagine && <img src={recipe.imagine} alt={`Imagine pentru ${recipe.titlu}`} />}
+                  <h3>{recipe.titlu}</h3>
+                  {recipe.viewing && (
+                    <div>
+                      <h4>Descriere</h4>
+                      <p dangerouslySetInnerHTML={{ __html: recipe.descriere }}></p>
+                      <h4>Ingrediente</h4>
+                      <ul>
+                        {recipe.ingrediente.map((ingredient, i) => (
+                          <li key={i}>{ingredient}</li>
+                        ))}
+                      </ul>
+                      <h4>Instructiuni</h4>
+                      <ol>
+                        {recipe.instructiuni.map((step, i) => (
+                          <li key={i}>{step}</li>
+                        ))}
+                      </ol>
+                    </div>
+                  )}
+                  <div className="buttons">
+                    <button onClick={() => handleView(recipe.id)}>
+                      Vezi {recipe.viewing ? 'mai putin' : 'mai mult'}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
            </div>
                 
                 
@@ -245,8 +304,35 @@ const errorMessage = error.message;
                     <Link to='/profile'><img src={user?.photoURL || profile} /></Link>
                         
                         </div>
-                        <Test/>
-                        
+                        <Test />
+                        {/* {currentRecipe && (
+        <div className="recipe">
+         {currentRecipe && (
+            <div className="recipe">
+              {currentRecipe.imagine && (
+                <img src={currentRecipe.imagine} alt={`Imagine pentru ${currentRecipe.titlu}`} />
+              )}
+              <h3>{currentRecipe.titlu}</h3>
+              <div>
+                <h4>Descriere</h4>
+                <p dangerouslySetInnerHTML={{ __html: currentRecipe.descriere }}></p>
+                <h4>Ingrediente</h4>
+                <ul>
+                  {currentRecipe.ingrediente.map((ingredient, i) => (
+                    <li key={i}>{ingredient}</li>
+                  ))}
+                </ul>
+                <h4>Instructiuni</h4>
+                <ol>
+                  {currentRecipe.instructiuni.map((step, i) => (
+                    <li key={i}>{step}</li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          )}
+        </div>
+      )} */}
                        </div>        
             </div>
             

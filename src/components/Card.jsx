@@ -78,7 +78,7 @@ async function fetchDataFromFirestore(){
         // Actualizează câmpul 'favorite' al documentului utilizatorului curent
         // pentru a adăuga ID-ul retetei respective
         const recipeId = this.currentCard.id;
-    
+        
         // Citeste documentul utilizatorului pentru a obține datele existente
         getDoc(userDocRef).then((doc) => {
             if (doc.exists()) {
