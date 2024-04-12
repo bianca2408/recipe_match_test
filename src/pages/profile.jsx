@@ -84,7 +84,7 @@ export default function Home(){
           if (body.classList.contains("dark")) {
             modeText.innerText = "Luminos";
           } else {
-            modeText.innerText = "Intunecat";
+            modeText.innerText = "Întunecat";
           }
         });
     
@@ -531,7 +531,7 @@ function handleSearch(event) {
                 <li className="search-box">
                             
                                 <box-icon name='search' class="icon"></box-icon>
-                                <input type="text" placeholder="Cauta..."/> 
+                                <input type="text" placeholder="Caută..."/> 
                             
                         </li>
                     <ul className="menu-links">
@@ -539,7 +539,7 @@ function handleSearch(event) {
                         <Link to='/profile'>
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
-                                    Retetele mele
+                                    Rețetele mele
                                 </span>
                             </Link>
                         </li>
@@ -571,7 +571,7 @@ function handleSearch(event) {
                         <Link to='/profile'>
                                 <box-icon name='cog' class="icon"></box-icon>
                                 <span className="text nav-text">
-                                    Setari
+                                    Setări
                                 </span>
                             </Link>
                         </li>
@@ -592,7 +592,7 @@ function handleSearch(event) {
                            <box-icon type='solid' name='moon' class="i moon"></box-icon>
                            <box-icon type='solid' name='sun' class="i sun"></box-icon>
                            </div>
-                            <span className="mode-text text">Intunecat</span>    
+                            <span className="mode-text text">Întunecat</span>    
                            <div className="toggle-switch">
                             <span className="switch"></span>
                            </div>
@@ -604,7 +604,7 @@ function handleSearch(event) {
             <div  className="main--content">
             <div className="header--wrapper">
 
-            <h2 style={{ textAlign: 'center', fontFamily: 'Playfair Display, serif', fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '1px dotted lightgray' }}>Retetele mele</h2>
+            <h2 style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '2px solid lightgray' }}>Rețetele mele</h2>
 
 
 
@@ -676,7 +676,7 @@ function handleSearch(event) {
        
        {popupActive && <div className="popup">
         <div className="popup-inner">
-        <h2 style={{textAlign: 'center', fontFamily: 'Playfair Display, serif', fontSize: '2rem', color: '#fff', marginTop: '20px'}}>Adauga o noua reteta</h2>
+        <h2 style={{textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px'}}>Adaugă o nouă rețetă</h2>
           <form onSubmit={handleSubmit}>
 
 
@@ -710,8 +710,8 @@ function handleSearch(event) {
     onChange={e => setForm({...form, descriere: e.target.value})} />
 </div>
 
-<div className="form-group">
-  <label>Ingrediente</label>
+<div className="form-group" style={{  justifyContent: 'center', alignItems: 'center' }}>
+  <label style={{ textAlign: 'center' }}>Ingrediente</label>
   {
     form.ingrediente.map((ingredient, i) => (
       <div key={i}>
@@ -725,11 +725,13 @@ function handleSearch(event) {
      
     ))
   }
-  <button type="button" onClick={handleIngredientCount}>Adauga ingredient</button>
+  <button type="button" onClick={handleIngredientCount}>Adaugă ingredient</button>
 </div>
 
-<div className="form-group">
-  <label>Instructiuni</label>
+<div className="form-group" style={{  justifyContent: 'center', alignItems: 'center' }}>
+  <label style={{ textAlign: 'center' }}>Instrucțiuni</label>
+
+
   {
     form.instructiuni.map((step, i) => (
       <textarea 
@@ -739,12 +741,12 @@ function handleSearch(event) {
         onChange={e => handleStep(e, i)} />
     ))
   }
-  <button type="button" onClick={handleStepCount}>Adauga instructiune</button>
+  <button type="button" onClick={handleStepCount}>Adaugă instrucțiune</button>
 </div>
 
 <div className="edit-delete-buttons">
-  <button onClick={uploadFile} type="submit">Submit</button>
-  <button type="button" onClick={() => {setPopupActive(false); resetForm()}}>Close</button>
+  <button onClick={uploadFile} type="submit">Publică Rețeta</button>
+  <button type="button" onClick={() => {setPopupActive(false); resetForm()}}>Închide</button>
 </div>
 
 </form>
@@ -772,7 +774,7 @@ function handleSearch(event) {
           <label htmlFor="file-input">
           <img
             src={photoURL}
-              alt="Incarca"
+              alt="Încarcă"
             style={{
               width: '100px',
               height: '100px',
@@ -786,19 +788,21 @@ function handleSearch(event) {
             }}
 />
           </label>
-          <button  onClick={submitData}>Incarca</button>
-        </div>
-                    <div className="user-info">
-                    <button onClick={() => setPopupActive(!popupActive)} class="add--recipe" >Adauga reteta
+          <button  onClick={submitData}>Încarcă imagine profil</button>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <button onClick={() => setPopupActive(!popupActive)} class="add--recipe" >Adaugă rețetă
                     </button>
                     <br></br>
-                     
-                      <span className="username">Nume: </span>
-                      <br></br>
-                      <span className="email">Email: </span>
-                    <br></br>
-                      <span className="user-id">User id: </span>
-                    </div>
+                   
+  <span className="username" style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '1.5rem', color: 'black', marginTop: '20px' }}>Nume: </span>
+  <br />
+  <span className="email" style={{ textAlign: 'center',fontFamily: "Poppins, sans-serif", fontSize: '1.5rem', color: 'black' }}>Email: </span>
+  <br />
+  <span className="user-id" style={{ textAlign: 'center' }}>User id: </span>
+</div>
+
+        </div>
+                    
                     
                     
                     

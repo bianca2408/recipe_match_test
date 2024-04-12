@@ -8,7 +8,7 @@
 
 :root{
   /* Colors */
-  --body-color: #cd5c5c;
+  --body-color: rgb(225, 32, 32);
   --sidebar--color: #A8EDDA;
   --primary-color:#6361B5 ;
  /* linear-gradient(315deg, #ffffff 0%, #a562e6 74%) */
@@ -339,13 +339,15 @@ body.dark .switch::before{
   background: rgba(255,255,255, .2);
   box-shadow: 0 5px 15px rgba(0,0,0, .5);
 }
-.profile--wrapper img{
+/* .profile--wrapper img{
   width: 50px;
   height: 50px;
   cursor: pointer;
   border-radius: 50%;
+  float: right; 
+  margin-left: 10px;
 
-}
+} */
 .profile--bar{
   height: 80px;
   width: 100%;
@@ -355,9 +357,20 @@ body.dark .switch::before{
   border-radius: 20px;
   background: #23ABA6;
   padding: 10px;
-  
+  border-bottom-left-radius: 0% ;
+  border-bottom-right-radius: 0% ;
+  border-bottom: 2px solid lightgray;
 }
-
+.profile--bar img {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 50%;
+  position: absolute; /* Poziționați imaginea absolut pentru a o plasa în dreapta .profile--wrapper */
+  right: 10px; /* Ajustați spațiul de la marginea dreaptă a .profile--wrapper */
+  transform: translateY(-50%);
+  border: 2px solid black;
+}
 .add--recipe{
    /* height: 40px; */
   /* width: 40px;  */
@@ -366,14 +379,14 @@ body.dark .switch::before{
   outline: 0;
   border: 0;
   cursor: pointer;
-  background-color: #93383c;
+  background-color: #d88f5b;
   
   border-radius: 4px;
   padding: 8px 16px;
   font-size: 16px;
   
   font-weight: 700;
-  color: #cd5c5c;
+  color: white;
   line-height: 26px;
 
 }
@@ -581,7 +594,7 @@ li {
 }
 
 .popup-inner {
-  background-color: #a562e6;
+  background-color: #6071BE;
   padding: 1rem;
   border-radius: 0.5rem;
   width: 100%;
@@ -724,8 +737,8 @@ textarea {
 
 .user-info{
   position: absolute;
-    margin: auto;
-   
+  margin: auto;
+  justify-items: center;
 }
 
 

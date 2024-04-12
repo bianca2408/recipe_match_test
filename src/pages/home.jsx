@@ -17,12 +17,10 @@ import profile from '../assets/profile.png';
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase.js";
 
-import Cards from './Cards.jsx'
-
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import { database } from "../firebase.js";
-import { collection, doc, getDocs, getDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, getDoc, query, where } from 'firebase/firestore';
 
 
     
@@ -39,7 +37,7 @@ async function fetchDataFromFirestore(){
     return data;
     }
 
-
+    
 
 export default function Home(){
 
@@ -47,31 +45,25 @@ export default function Home(){
     const user = auth.currentUser;
     const [recipes, setRecipes] = useState([]);
     const [filteredRecipes, setFilteredRecipes] = useState([]);
+    const [selectedIngredients, setSelectedIngredients] = useState([]);
 
-    useEffect(() => {
-        async function fetchData() {
-            const data = await fetchDataFromFirestore();
-            setRecipes(data);
-            setFilteredRecipes(data);
-        }
-        fetchData();
-    },[]); //run once when the component loads and never again
-    // function handleFilteredRecipes(filteredRecipes) {
-    //   setFilteredRecipes(filteredRecipes);
-    // }
-    // useEffect(() => {
-    //   const handleFilteredRecipes = (selectedIngredients) => {
-    //     const filteredRecipes = recipes.filter(recipe => {
-    //       return selectedIngredients.every(selectedIngredient => {
-    //         return recipe.ingrediente.includes(selectedIngredient);
-    //       });
-    //     });
-    //     setFilteredRecipes(filteredRecipes);
-    //   };
-  
-     
-    // }, [recipes]);
-
+    function handleCheckboxChange(ingredient, checked) {
+      if (checked) {
+        setSelectedIngredients(prevSelectedIngredients => [...prevSelectedIngredients, ingredient]);
+      } else {
+        setSelectedIngredients(prevSelectedIngredients =>
+          prevSelectedIngredients.filter(selectedIngredient => selectedIngredient.id !== ingredient.id)
+        );
+      }
+      
+      // Filtrarea retetelor corespunzatoare ingredientelor selectate
+      const filteredRecipes = recipes.filter(recipe => {
+        return selectedIngredients.every(selectedIngredient => {
+          return recipe.ingrediente.includes(selectedIngredient.id);
+        });
+      });
+      setFilteredRecipes(filteredRecipes);
+    }
 const handleLogOut = (e) =>{
 
     e.preventDefault();
@@ -180,7 +172,7 @@ const errorMessage = error.message;
                 <li className="search-box">
                             
                                 <box-icon name='search' class="icon"></box-icon>
-                                <input type="text" placeholder="Cauta..."/> 
+                                <input type="text" placeholder="Caută..."/> 
                             
                         </li>
                     <ul className="menu-links">
@@ -188,7 +180,7 @@ const errorMessage = error.message;
                         <Link to='/profile'>
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
-                                    Retetele mele
+                                    Rețetele mele
                                 </span>
                             </Link>
                         </li>
@@ -220,7 +212,7 @@ const errorMessage = error.message;
                         <Link to='/profile'>
                                 <box-icon name='cog' class="icon"></box-icon>
                                 <span className="text nav-text">
-                                    Setari
+                                    Setări
                                 </span>
                             </Link>
                         </li>
@@ -245,7 +237,7 @@ const errorMessage = error.message;
                            <box-icon type='solid' name='moon' class="i moon"></box-icon>
                            <box-icon type='solid' name='sun' class="i sun"></box-icon>
                            </div>
-                            <span className="mode-text text">Intunecat</span>    
+                            <span className="mode-text text">Întunecat</span>    
                            <div className="toggle-switch">
                             <span className="switch"></span>
                            </div>
@@ -263,7 +255,7 @@ const errorMessage = error.message;
                 <evil-tinder></evil-tinder>
 
                 <div className="recipes">
-              {filteredRecipes.map((recipe) => (
+              {selectedIngredients.map((recipe) => (
                 <div className="recipe" key={recipe.id}>
                   {recipe.imagine && <img src={recipe.imagine} alt={`Imagine pentru ${recipe.titlu}`} />}
                   <h3>{recipe.titlu}</h3>
@@ -299,12 +291,12 @@ const errorMessage = error.message;
                 <div className="profile--wrapper">
                     <div className="profile--bar">
                     
-                    <button class="add--recipe" ><box-icon name='plus'></box-icon>
-                    </button>
+                    {/* <button class="add--recipe" ><box-icon name='plus'></box-icon></button> */}
+
                     <Link to='/profile'><img src={user?.photoURL || profile} /></Link>
                         
                         </div>
-                        <Test />
+                        <Test  handleCheckboxChange={handleCheckboxChange}/>
                         {/* {currentRecipe && (
         <div className="recipe">
          {currentRecipe && (

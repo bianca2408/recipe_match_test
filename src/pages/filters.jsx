@@ -29,7 +29,7 @@ async function fetchRecipesFromFirestore(selectedIngredients) {
   return recipes;
 }
 
-export default function Test() {
+export default function Test({ handleCheckboxChange }) {
   const [ingrediente, setIngrediente] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [recipes, setRecipes] = useState([]);
@@ -88,7 +88,9 @@ export default function Test() {
       )
     );
   }, [searchTerm]);
+  
 
+  
   return (
     <div>
       
@@ -112,7 +114,7 @@ export default function Test() {
                 <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
               </svg>
             </span>
-            <span>{ingredient.id}</span>
+            <span>{ingredient.nume_ingredient}</span>
           </label>
         ))}
       </div>

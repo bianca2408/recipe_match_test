@@ -53,7 +53,7 @@ label{
 	font-size: 2.3rem;
 	justify-content: center;
 	display: flex;
-	margin: 60px;
+	margin: 50px;
 	font-weight: bold;
 	cursor: pointer;
 	transition: 0.5s ease-in-out;
@@ -92,13 +92,14 @@ button:hover{
 	background: #707070;
 }
 .login{
-	height: 500px;
+	height: 600px;
 	background: #63C9BE;
 	border-radius: 60% / 10%;
-	transform: translateY(-180px);
+	transform: translateY(-170px);
 	transition: .8s ease-in-out;
 }
 .login label{
+    
 	color: #FDE8CD;
 	transform: scale(.6);
 

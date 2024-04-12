@@ -46,10 +46,10 @@ const Login = () => {
         e.preventDefault();
         const auth = getAuth();
         
-        if (!isValidEmail(email)) {
-            setEmailError('Adresa de e-mail introdusă nu este validă!');
-            return;
-        }
+        // if (!isValidEmail(email)) {
+        //     setEmailError('Adresa de e-mail introdusă nu este validă!');
+        //     return;
+        // }
 
         // Verificare dacă parolele coincid
         if (password !== confirmpassword) {
@@ -102,13 +102,14 @@ const Login = () => {
                     <input type="checkbox" id="chk" aria-hidden="true" />
                     <div className="signup">
                         <form onSubmit={(e) => handleSubmitsignup(e)} action="">
-                            <label htmlFor="chk" aria-hidden="true">Inregistrare</label>
+                            {/* <img src={logo} style={{width: '50px', height: '50px' }}></img> */}
+                            <label htmlFor="chk" aria-hidden="true">Înregistrare</label>
                             <input type="text" value={username} name="txt" placeholder="Nume utilizator" required="" onChange={(e) => setUsername(e.target.value)} />
                             <input type="email" value={email} name="email" placeholder="Email" required="" onChange={(e) => setEmail(e.target.value)} />
                             {emailError && <p className="error-message">Adresa de e-mail este invalidă!</p>}
-                            <input type="password" value={password} name="pswd" placeholder="Parola" required="" onChange={(e) => setPassword(e.target.value)} />
-                            <input type="password" value={confirmpassword} name="pswd" placeholder="Confirmare Parola" required="" onChange={(e) => setConfirmPassword(e.target.value)} />
-                            <button>Inregistreaza-te</button>
+                            <input type="password" value={password} name="pswd" placeholder="Parolă" required="" onChange={(e) => setPassword(e.target.value)} />
+                            <input type="password" value={confirmpassword} name="pswd" placeholder="Confirmare Parolă" required="" onChange={(e) => setConfirmPassword(e.target.value)} />
+                            <button>Înregistrează-te</button>
                             <button onClick={logGoogleUser}>Google</button>
                         </form>
                     </div>
@@ -117,8 +118,8 @@ const Login = () => {
                             <label htmlFor="chk" aria-hidden="true">Conectare</label>
                             <input type="email" name="email" placeholder="Email" required="" value={email} onChange={(e) => setEmail(e.target.value)} />
                             {emailError && <p className="error-message">Adresa de e-mail este invalidă!</p>}
-                            <input type="password" name="pswd" placeholder="Parola" required="" value={password} onChange={(e) => setPassword(e.target.value)} />
-                            <button>Conecteaza-te</button>
+                            <input type="password" name="pswd" placeholder="Parolă" required="" value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <button>Conectează-te</button>
                         </form>
                     </div>
                 </div>

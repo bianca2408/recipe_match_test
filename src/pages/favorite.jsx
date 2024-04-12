@@ -142,7 +142,7 @@ export default function Home() {
                 <li className="search-box">
                             
                                 <box-icon name='search' class="icon"></box-icon>
-                                <input type="text" placeholder="Cauta..."/> 
+                                <input type="text" placeholder="Caută..."/> 
                             
                         </li>
                     <ul className="menu-links">
@@ -150,7 +150,7 @@ export default function Home() {
                         <Link to='/profile'>
                                 <box-icon name='food-menu' class="icon"></box-icon>
                                 <span className="text nav-text">
-                                    Retetele mele
+                                    Rețetele mele
                                 </span>
                             </Link>
                         </li>
@@ -182,7 +182,7 @@ export default function Home() {
                         <Link to='/profile'>
                                 <box-icon name='cog' class="icon"></box-icon>
                                 <span className="text nav-text">
-                                    Setari
+                                    Setări
                                 </span>
                             </Link>
                         </li>
@@ -203,7 +203,7 @@ export default function Home() {
                            <box-icon type='solid' name='moon' class="i moon"></box-icon>
                            <box-icon type='solid' name='sun' class="i sun"></box-icon>
                            </div>
-                            <span className="mode-text text">Intunecat</span>    
+                            <span className="mode-text text">Întunecat</span>    
                            <div className="toggle-switch">
                             <span className="switch"></span>
                            </div>
@@ -215,7 +215,7 @@ export default function Home() {
         <div className="main--content">
           <div className="header--wrapper">
           
-          <h2 style={{ textAlign: 'center', fontFamily: 'Playfair Display, serif', fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '1px dotted lightgray' }}>Retete favorite</h2>
+          <h2 style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '2px solid lightgray' }}>Rețete favorite</h2>
 
             
             <div className="recipes">
