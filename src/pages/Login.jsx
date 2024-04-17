@@ -3,7 +3,7 @@ import { auth, database } from '../firebase';
 import '../Login.css';
 import { sendEmailVerification, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, getAuth, onAuthStateChanged } from "firebase/auth";
 import { signInWithGooglePopup } from "../firebase";
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
@@ -46,18 +46,37 @@ const Login = () => {
         e.preventDefault();
         const auth = getAuth();
         
-        // if (!isValidEmail(email)) {
-        //     setEmailError('Adresa de e-mail introdusă nu este validă!');
-        //     return;
-        // }
-
         // Verificare dacă parolele coincid
         if (password !== confirmpassword) {
             alert('Parola și confirmarea parolei nu coincid!');
             return;
         }
+        
+        // Verificare dacă numele de utilizator este deja folosit
+        const usersRef = collection(database, 'utilizatori');
+        const queryRef = query(usersRef, where('nume_utilizator', '==', username));
+ 
+        getDocs(queryRef)
+            .then((querySnapshot) => {
+                if (!querySnapshot.empty) {
+                    alert('Numele de utilizator este deja folosit!');
+                    return Promise.reject('Numele de utilizator este deja folosit!');
+                } else {
+                    // Verificare dacă adresa de email este deja folosită
+                    const emailQuery = query(usersRef, where('email', '==', email));
 
-        createUserWithEmailAndPassword(auth, email, password)
+                    return getDocs(emailQuery);
+                }
+            })
+            .then((emailSnapshot) => {
+                if (!emailSnapshot.empty) {
+                    alert('Adresa de email este deja înregistrată!');
+                    return Promise.reject('Adresa de email este deja înregistrată!');
+                } else {
+                    // Continuă procesul de înregistrare
+                    return createUserWithEmailAndPassword(auth, email, password);
+                }
+            })
             .then((userCredential) => {
                 //SE MODIFICA USERNAME UL
                 const docRef = setDoc(doc(database, "utilizatori", userCredential.user.uid), {
@@ -77,7 +96,8 @@ const Login = () => {
                 })
 
                 console.log("creat");
-                alert("cont creat")
+                alert("cont creat");
+                navigate('/home');
             })
             .catch((error) => {
                 alert('Error!')
