@@ -36,11 +36,35 @@ async function fetchDataFromFirestore(){
     
         <div class="footer">
           <button class="dissBtn" on:click="this.nope()">Dislike</button>
+          <button class="infoBtn" on:click="this.info()">Info</button>
           <button class="likeBtn" on:click="this.like()">Like</button>
         </div>
+        <div class="popup_info {{ this.popupVisible ? 'true' : 'false' }}">
+        <div class="popup-content">
+          <h2>{{ this.currentCard.title }}</h2>
+          <p>{{ this.currentCard.description }}</p>
+          <h3>Ingrediente:</h3>
+    <ul>
+      {{# each this.currentCard.ingredients }}
+        <li>{{ this }}</li>
+      {{/ each }}
+    </ul>
+    
+    <h3>Instrucțiuni:</h3>
+    <ol>
+      {{# each this.currentCard.instructions }}
+        <li>{{ this }}</li>
+      {{/ each }}
+    </ol>
+          <button class="closeBtn" on:click="this.togglePopup()">Close</button>
+        </div>
+      </div>
+      
+      
       `;
     
       static props = {
+        popupVisible: { type: Boolean, default: false },
         howFarWeHaveMoved: Number,
         emptyCard: {
           get default() {
@@ -99,20 +123,26 @@ async function fetchDataFromFirestore(){
             console.error("Eroare la citirea documentului utilizatorului:", error);
         });
     }
-    
-    
-    
-    
-    
-    
+    info() {
+      console.log("info")
+      this.togglePopup();
+      
+    }
     
     
       nope() {
         console.log("NOPED");
         this.removeCard();
+      }
+
+      togglePopup() {
+        console.log("Metoda togglePopup() este apelată.");
+        this.popupVisible = !this.popupVisible;
+        console.log("Starea popupVisible este:", this.popupVisible);
         
       }
-    
+      
+      
       removeCard() {
         const updatedCards = [...this.cards];
         updatedCards.shift(); // Eliminăm prima imagine din array
@@ -123,7 +153,11 @@ async function fetchDataFromFirestore(){
         const data = await fetchDataFromFirestore();
         this.cards = data.map((card) => ({
           img: card.imagine,
-          id: card.id
+          id: card.id,
+          title: card.titlu,
+          description: card.descriere,
+          ingredients: card.ingrediente, 
+          instructions: card.instructiuni 
         }));
     
         var current = this.querySelector(".current");
@@ -149,6 +183,8 @@ async function fetchDataFromFirestore(){
             this.stopListening(document);
           });
         });
+         
+          
       }
     }
     

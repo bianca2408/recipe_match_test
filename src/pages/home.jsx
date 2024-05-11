@@ -46,8 +46,14 @@ export default function Home(){
     const [recipes, setRecipes] = useState([]);
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [selectedIngredients, setSelectedIngredients] = useState([]);
-
-    function handleCheckboxChange(ingredient, checked) {
+  
+  // CONSTANTE PENTRU AFISARE MENIU LA APASAREA POZEI DE PROFIL PE HOME
+    const [menuOpened, setMenuOpened] = useState(false); // Starea pentru a urmări dacă meniul este deschis sau închis
+    const toggleMenu = () => {
+    setMenuOpened(prevState => !prevState); // Inversează starea pentru a deschide sau închide meniul
+  };
+  // FINAL
+ function handleCheckboxChange(ingredient, checked) {
       if (checked) {
         setSelectedIngredients(prevSelectedIngredients => [...prevSelectedIngredients, ingredient]);
       } else {
@@ -55,7 +61,10 @@ export default function Home(){
           prevSelectedIngredients.filter(selectedIngredient => selectedIngredient.id !== ingredient.id)
         );
       }
-      
+     
+
+ 
+
       // Filtrarea retetelor corespunzatoare ingredientelor selectate
       const filteredRecipes = recipes.filter(recipe => {
         return selectedIngredients.every(selectedIngredient => {
@@ -289,13 +298,26 @@ const errorMessage = error.message;
                 
                 
                 <div className="profile--wrapper">
-                    <div className="profile--bar">
-                    
-                    {/* <button class="add--recipe" ><box-icon name='plus'></box-icon></button> */}
-
-                    <Link to='/profile'><img src={user?.photoURL || profile} /></Link>
-                        
-                        </div>
+                <div className="profile--bar">
+      {/* <button class="add--recipe" ><box-icon name='plus'></box-icon></button> */}
+      <Link to='/profile'><img src={user?.photoURL || profile} onClick={toggleMenu} /></Link>
+      
+      {/* <div className="container">
+        <div className={`menubtn ${menuOpened ? 'opened' : ''}`} onClick={toggleMenu}>
+          
+          <span></span>
+        </div>
+        <nav className={`navmenu ${menuOpened ? 'opened' : ''}`}>
+        
+          <h4>Menu</h4>
+          <ul className="text-list">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Gallery</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </nav>
+      </div> */}
+    </div>
                         <Test  handleCheckboxChange={handleCheckboxChange}/>
                         {/* {currentRecipe && (
         <div className="recipe">

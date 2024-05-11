@@ -35,6 +35,7 @@ export default function Test({ handleCheckboxChange }) {
   const [recipes, setRecipes] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // Starea pentru termenul de căutare
   const [prevSelectedIngredients, setPrevSelectedIngredients] = useState([]);
+  
 
   useEffect(() => {
     async function fetchData() {
