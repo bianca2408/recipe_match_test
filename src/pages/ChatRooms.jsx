@@ -11,9 +11,10 @@ import { storage } from "../firebase.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../firebase.js";
 import { database } from "../firebase.js";
-import { getDoc, collection, getDocs, doc, addDoc, deleteDoc } from "firebase/firestore"
+import { getDoc, collection, getDocs, doc, addDoc, deleteDoc, setDoc, onSnapshot } from "firebase/firestore"
 import Modal from "../components/Modal.js";
 import Login from "./Login.jsx";
+
 
 export default function Home() {
   const user = auth.currentUser;
@@ -42,75 +43,156 @@ const [isGroupCreated, setIsGroupCreated] = useState(false); // Starea pentru a 
 
 const togglePopup = () => {
   setIsOpen(prevState => !prevState); // Inversează starea pentru a deschide sau închide popup-ul
+  
 };
 
 const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Creează un obiect cu datele grupului
-    const groupData = {
-      name: groupName,
-      description: groupDescription,
-      type: groupType,
-      password: groupType === 'private' ? password : null,
-      createdBy: user.uid, // Adaugă ID-ul utilizatorului care a creat grupul
-    };
-    try {
-      // Adaugă documentul în colecția "grupuri" din Firestore
-      const docRef = await addDoc(collection(database, 'grupuri'), groupData);
-      console.log('Document written with ID: ', docRef.id);
-      // Actualizează starea locală pentru a include noul grup
-      setGroups([...groups, { id: docRef.id, ...groupData }]);
+  e.preventDefault();
+  try {
+    if (selectedGroup) {
+      // Verificăm dacă un grup este deja selectat pentru editare
+      const groupDocRef = doc(database, 'grupuri', selectedGroup.id); // Obținem referința către documentul grupului
+      const updatedGroupData = {
+        name: groupName,
+        description: groupDescription,
+        type: groupType,
+        password: groupType === 'private' ? password : null,
+      };
+      await setDoc(groupDocRef, updatedGroupData, { merge: true }); // Actualizăm documentul grupului în Firebase
+      console.log('Grupul a fost actualizat cu succes!');
       // Resetează valorile din formular
       setGroupName('');
       setGroupDescription('');
       setPassword('');
+      setIsOpen(false); // Închide popup-ul de editare
+      setSelectedGroup(null); // Deselectează grupul pentru editare
+    } else {
+      // Dacă nu există niciun grup selectat pentru editare, creează unul nou
+      const groupData = {
+        name: groupName,
+        description: groupDescription,
+        type: groupType,
+        password: groupType === 'private' ? password : null,
+        createdBy: user.uid,
+      };
+      const docRef = await addDoc(collection(database, 'grupuri'), groupData);
+      console.log('Document written with ID: ', docRef.id);
+      setGroups([...groups, { id: docRef.id, ...groupData }]);
+      setGroupName('');
+      setGroupDescription('');
+      setPassword('');
       setIsGroupCreated(true);
-      // Închide popup-ul după trimiterea datelor
       setIsOpen(false);
       setTimeout(() => {
         setIsGroupCreated(false);
       }, 3000);
-    } catch (error) {
-      console.error('Error adding document: ', error);
     }
-  };
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+
   
 
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
-    const fetchGroups = async () => {
-      const querySnapshot = await getDocs(collection(database, 'grupuri'));
-      const fetchedGroups = [];
-      querySnapshot.forEach((doc) => {
-        fetchedGroups.push({ id: doc.id, ...doc.data() });
+    const unsubscribe = onSnapshot(collection(database, 'grupuri'), (snapshot) => {
+      const updatedGroups = [];
+      snapshot.forEach((doc) => {
+        updatedGroups.push({ id: doc.id, ...doc.data() });
       });
-      setGroups(fetchedGroups);
-    };
-
-    fetchGroups();
+      setGroups(updatedGroups);
+    });
+  
+    return () => unsubscribe();
   }, []);
+  
+
+// EDITARE GRUP//
+// Funcția pentru deschiderea formularului de editare
+const handleEditGroup = (group) => {
+  setSelectedGroup(group);
+  setGroupName(group.name);
+  setGroupDescription(group.description);
+  setGroupType(group.type);
+  setPassword(group.password || ''); // Verificăm dacă parola este definită pentru grupurile private
+  setIsOpen(true); // Deschidem popup-ul pentru editare
+};
 
   //STERGERE GRUP//
+  const [selectedGroupId, setSelectedGroupId] = useState(null);
+  const [isOpenModal, setIsOpenModal] = useState(false); // Starea pentru a urmări dacă popup-ul este deschis sau închis
+
+  const handleOpenModal = (groupId) => {
+    setSelectedGroupId(groupId);
+    setIsOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsOpenModal(false);
+    
+  };  
  // Definirea funcției handleDeleteGroup pentru ștergerea unui grup
-const handleDeleteGroup = async (groupId) => {
+ const handleDeleteGroup = async () => {
     try {
       // Construiește referința către documentul grupului
-      const groupDocRef = doc(database, 'grupuri', groupId);
+      const groupDocRef = doc(database, 'grupuri', selectedGroupId);
       
       // Șterge documentul grupului din baza de date
       await deleteDoc(groupDocRef);
       
       // Actualizează starea locală pentru a reflecta ștergerea grupului
-      setGroups(groups.filter(group => group.id !== groupId));
+      setGroups(groups.filter(group => group.id !== selectedGroupId));
       
       // Opcional: afișează un mesaj de succes sau efectuează alte acțiuni necesare
       console.log('Grupul a fost șters cu succes!');
+
+      // Închide modalul după ștergere
+      setIsOpenModal(false);
     } catch (error) {
       console.error('Eroare la ștergerea grupului:', error);
     }
   };
+
+// AFISARE CONVERSATIE GRUP//
+const [showConversation, setShowConversation] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState(null);
+const [passwordGroup, setPasswordGroup] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  // Funcția pentru afișarea conversației grupului selectat
+  const handleGroupClick = (group) => {
+    
+      setSelectedGroup(group);
+      if (group.type === 'private') {
+        if (group.createdBy === user.uid) {
+          // Dacă utilizatorul curent este cel care a creat grupul, afișează direct conversația grupului
+          setShowConversation(true);
+        } else {
+          // Altfel, afișează un prompt pentru introducerea parolei
+          const enteredPassword = prompt('Introduceți parola grupului:');
+          if (enteredPassword === group.password) {
+            setShowConversation(true);
+            setPasswordError(false);
+          } else {
+            // Afișează un mesaj de eroare dacă parola este incorectă
+            setPasswordError(true);
+          }
+        }
+      } else {
+        setShowConversation(true);
+      }
+    
+  };
   
+  
+
+  // Funcția pentru revenirea la lista de grupuri
+  const handleBackButtonClick = () => {
+    setShowConversation(false);
+    setSelectedGroup(null);
+  };
   useEffect(() => {
     const body = document.querySelector("body"),
     sidebar = body.querySelector(".sidebar"),
@@ -298,17 +380,26 @@ const handleDeleteGroup = async (groupId) => {
           
           <h2 style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '2px solid lightgray' }}>Grupuri de chat</h2>
 
+  <div>
+      {showConversation ? (
+        <div>
+          <h2>Conversația grupului: {selectedGroup.name}</h2>
+          {/* Aici poți afișa conversația grupului */}
+          <button onClick={handleBackButtonClick}>Înapoi</button>
+        </div>
+      ) : (
           <div>
-      
       <ul>
         {groups.filter(group => group.createdBy !== user.uid).map((group) => (
-          <li key={group.id} className="group-item">
+          <li key={group.id} className="group-item" onClick={() => handleGroupClick(group)}>
             <strong>{group.name}</strong> - {group.description}
             {group.type === 'private' && <box-icon type='solid' name='lock-alt'  style={{ float: 'right' }}></box-icon>} {/* Adăugăm iconița cu lacăt pentru grupurile private */}
           </li>
         ))}
       </ul>
+       {passwordError && <p>Parola introdusă este incorectă. Vă rugăm să încercați din nou.</p>}
     </div>
+      )} </div>
 </div>
           <div className="profile--wrapper">
                 <div className="profile--bar">
@@ -344,6 +435,7 @@ const handleDeleteGroup = async (groupId) => {
               </label>
             )}
             <button type="submit">Trimite</button>
+            <button className="close-btn" onClick={() => {setIsOpen(false) ; setSelectedGroup(null)}}>Închide</button>
           </form>
         </div>
       )}
@@ -355,12 +447,15 @@ const handleDeleteGroup = async (groupId) => {
       <h2>Grupurile mele</h2>
       <ul>
       {groups.filter(group => group.createdBy === user.uid).map((group) => (
-  <li key={group.id} className="group-item">
+    <li key={group.id} className={`group-item ${selectedGroup && selectedGroup.id === group.id ? 'active' : ''}`} onClick={() => handleGroupClick(group)}>
     <div className="group-info">
       <strong>{group.name}</strong> - {group.description}
     </div>
     <div className="group-actions">
-      <button className="delete-group-btn" onClick={() => handleDeleteGroup(group.id)}>
+    <button className="edit-group-btn" onClick={(e) => { e.stopPropagation(); handleEditGroup(group) }}>
+    <box-icon type='solid' name='edit-alt'></box-icon>
+        </button>
+      <button className="delete-group-btn" onClick={(e) => { e.stopPropagation(); handleOpenModal(group.id) }}>
         <box-icon name='trash'></box-icon>
       </button>
       {group.type === 'private' && 
@@ -369,6 +464,11 @@ const handleDeleteGroup = async (groupId) => {
     </div>
   </li>
 ))}
+ <Modal
+        isOpen={isOpenModal}
+        onClose={handleCloseModal}
+        onConfirm={handleDeleteGroup}
+      />
 
       </ul>
     </div>      
