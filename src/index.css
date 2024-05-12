@@ -804,12 +804,14 @@ textarea {
   padding: 10px 20px;
   margin-bottom: 10px;
   transition: background-color 0.3s, cursor 0.3s;
-  
   display: flex;
-  align-items: center;
-  margin-left: 1.5rem; /* Adaugă margin în stânga cu valoare 'auto' pentru a distribui marginea stângă automat */
-  margin-right: 1.5rem; /* Adaugă margin în dreapta cu valoare 'auto' pentru a distribui marginea dreaptă automat */
+  flex-direction: column; /* Schimbă direcția elementelor la vertical */
+  align-items: flex-start; /* Așază elementele de-a lungul axei transversale */
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
   margin-top: 1rem;
+  border: 1px solid #ccc;
+ 
 }
 
 .group-item:hover {
@@ -821,44 +823,55 @@ textarea {
 }
 .group-info {
   flex-grow: 1;
+  white-space: pre-wrap; /* Permite textului să se împartă pe mai multe linii */
+  word-break: break-word; /* Forțează despărțirea cuvintelor la sfârșitul containerului, dacă este necesar */
 }
+
+
 
 .group-actions {
   display: flex;
   align-items: center;
+  margin-left: auto; 
 }
-.edit-group-btn{
+
+.edit-group-btn {
   appearance: none;
   background: none;
   border: none;
-  padding: 3;
+  padding: 0;
   margin: 0;
   cursor: pointer;
-  width: auto;
-  height: auto;
+  width: 40px;
+  height: 40px;
+  display: flex; /* Setează afișarea ca flexbox */
+  justify-content: center; /* Aliniază orizontal conținutul în centrul butonului */
+  align-items: center; /* Aliniază vertical conținutul în centrul butonului */
   background-color: rgb(206, 125, 32); /* Setează culoarea de fundal la roșu */
   margin-right: 8px; /* Adaugă o margine dreapta */
 }
+
 .delete-group-btn {
   appearance: none;
   background: none;
   border: none;
-  padding: 3;
+  padding: 0;
   margin: 0;
   cursor: pointer;
-  width: auto;
-  height: auto;
-  background-color: red; /* Setează culoarea de fundal la roșu */
+  width: 40px;
+  height: 40px;
+  display: flex; /* Setează afișarea ca flexbox */
+  justify-content: center; /* Aliniază orizontal conținutul în centrul butonului */
+  align-items: center; /* Aliniază vertical conținutul în centrul butonului */
+  background-color: rgb(243, 40, 40); /* Setează culoarea de fundal la roșu */
   margin-right: 8px; /* Adaugă o margine dreapta */
 }
 
-.delete-group-btn box-icon {
-  color: white;
-  font-size: 24px; /* Ajustează dimensiunea corespunzător */
-  display: block; /* Asigură că iconița este bloc pentru a putea fi poziționată */
-  margin-left: auto; /* Adaugă o margine stânga */
+.expand-text {
+  color: blue;
+  
+  cursor: pointer;
 }
-
 
 
 /* MENIU LA POZA DE PROFIL */

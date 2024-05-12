@@ -155,16 +155,28 @@ const handleEditGroup = (group) => {
       console.error('Eroare la ștergerea grupului:', error);
     }
   };
+// EXTINDERE DESCRIERE GRUP//
+
+const [expandedItems, setExpandedItems] = useState({});
+
+const toggleExpand = ( groupId) => {
+ 
+  setExpandedItems(prevState => ({
+    ...prevState,
+    [groupId]: !prevState[groupId]
+  }));
+};
 
 // AFISARE CONVERSATIE GRUP//
 const [showConversation, setShowConversation] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
 const [passwordGroup, setPasswordGroup] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
+const [currentGroupName, setCurrentGroupName] = useState("Grupuri de chat");
   // Funcția pentru afișarea conversației grupului selectat
   const handleGroupClick = (group) => {
-    
+
       setSelectedGroup(group);
+      setCurrentGroupName(group.name);
       if (group.type === 'private') {
         if (group.createdBy === user.uid) {
           // Dacă utilizatorul curent este cel care a creat grupul, afișează direct conversația grupului
@@ -174,10 +186,10 @@ const [passwordGroup, setPasswordGroup] = useState('');
           const enteredPassword = prompt('Introduceți parola grupului:');
           if (enteredPassword === group.password) {
             setShowConversation(true);
-            setPasswordError(false);
+            
           } else {
             // Afișează un mesaj de eroare dacă parola este incorectă
-            setPasswordError(true);
+            window.alert('Parola introdusă este incorectă. Vă rugăm să încercați din nou.');
           }
         }
       } else {
@@ -190,6 +202,7 @@ const [passwordGroup, setPasswordGroup] = useState('');
 
   // Funcția pentru revenirea la lista de grupuri
   const handleBackButtonClick = () => {
+    setCurrentGroupName('Grupuri de chat');
     setShowConversation(false);
     setSelectedGroup(null);
   };
@@ -378,7 +391,7 @@ const [passwordGroup, setPasswordGroup] = useState('');
         
           <div className="header--wrapper">
           
-          <h2 style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '2px solid lightgray' }}>Grupuri de chat</h2>
+          <h2 style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '2px solid lightgray' }}>{currentGroupName}</h2>
 
   <div>
       {showConversation ? (
@@ -392,12 +405,22 @@ const [passwordGroup, setPasswordGroup] = useState('');
       <ul>
         {groups.filter(group => group.createdBy !== user.uid).map((group) => (
           <li key={group.id} className="group-item" onClick={() => handleGroupClick(group)}>
-            <strong>{group.name}</strong> - {group.description}
-            {group.type === 'private' && <box-icon type='solid' name='lock-alt'  style={{ float: 'right' }}></box-icon>} {/* Adăugăm iconița cu lacăt pentru grupurile private */}
+    <div className="group-info">
+  <strong>{group.name}</strong> -{" "}
+  {expandedItems[group.id] ? group.description : `${group.description.slice(0, 50)}`}
+  {group.description.length > 50 && (
+    <span className="expand-text" onClick={(e) => {e.stopPropagation(); toggleExpand(group.id)}}>
+      {expandedItems[group.id] ? ' ...mai puțin' : ' ...mai mult'}
+    </span>
+  )}
+</div>
+            <div className="group-actions">
+            {group.type === 'private' && <box-icon type='solid' name='lock-alt' ></box-icon>} {/* Adăugăm iconița cu lacăt pentru grupurile private */}
+          </div>
           </li>
         ))}
       </ul>
-       {passwordError && <p>Parola introdusă este incorectă. Vă rugăm să încercați din nou.</p>}
+        
     </div>
       )} </div>
 </div>
@@ -444,23 +467,30 @@ const [passwordGroup, setPasswordGroup] = useState('');
         <div className="success-message">Grupul a fost creat cu succes!</div>
       )}
                <div>
-      <h2>Grupurile mele</h2>
+      
       <ul>
       {groups.filter(group => group.createdBy === user.uid).map((group) => (
     <li key={group.id} className={`group-item ${selectedGroup && selectedGroup.id === group.id ? 'active' : ''}`} onClick={() => handleGroupClick(group)}>
-    <div className="group-info">
-      <strong>{group.name}</strong> - {group.description}
-    </div>
+  <div className="group-info">
+  <strong>{group.name}</strong> -{" "}
+  {expandedItems[group.id] ? group.description : `${group.description.slice(0, 15)}`}
+  {group.description.length > 15 && (
+    <span className="expand-text" onClick={(e) => {e.stopPropagation(); toggleExpand(group.id)}}>
+      {expandedItems[group.id] ? ' ...mai puțin' : ' ...mai mult'}
+    </span>
+  )}
+</div>
     <div className="group-actions">
-    <button className="edit-group-btn" onClick={(e) => { e.stopPropagation(); handleEditGroup(group) }}>
+     {group.type === 'private' && 
+        <box-icon type='solid' name='lock-alt' style={{marginRight: '8px'}} ></box-icon>
+      }
+      <button className="edit-group-btn" onClick={(e) => { e.stopPropagation(); handleEditGroup(group) }}>
     <box-icon type='solid' name='edit-alt'></box-icon>
         </button>
       <button className="delete-group-btn" onClick={(e) => { e.stopPropagation(); handleOpenModal(group.id) }}>
-        <box-icon name='trash'></box-icon>
+        <box-icon type='solid' name='trash'></box-icon>
       </button>
-      {group.type === 'private' && 
-        <box-icon type='solid' name='lock-alt' ></box-icon>
-      }
+     
     </div>
   </li>
 ))}
