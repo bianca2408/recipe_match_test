@@ -77,6 +77,10 @@ const handleSubmit = async (e) => {
       };
       const docRef = await addDoc(collection(database, 'grupuri'), groupData);
       console.log('Document written with ID: ', docRef.id);
+      await addDoc(collection(database, `grupuri/${docRef.id}/chats`), {
+        
+    });
+     
       setGroups([...groups, { id: docRef.id, ...groupData }]);
       setGroupName('');
       setGroupDescription('');
@@ -136,25 +140,33 @@ const handleEditGroup = (group) => {
   };  
  // Definirea funcției handleDeleteGroup pentru ștergerea unui grup
  const handleDeleteGroup = async () => {
-    try {
-      // Construiește referința către documentul grupului
-      const groupDocRef = doc(database, 'grupuri', selectedGroupId);
-      
-      // Șterge documentul grupului din baza de date
-      await deleteDoc(groupDocRef);
-      
-      // Actualizează starea locală pentru a reflecta ștergerea grupului
-      setGroups(groups.filter(group => group.id !== selectedGroupId));
-      
+  try {
+    console.log(selectedGroupId)
+       // Construiește referința către colecția 'chats' pentru grupul selectat
+       const chatsCollectionRef = collection(database, `grupuri/${selectedGroupId}/chats`);
+       // Obține toate documentele din colecția 'chats' pentru grupul selectat
+       const chatQuerySnapshot = await getDocs(chatsCollectionRef);
+       // Șterge fiecare document din colecția 'chats'
+       chatQuerySnapshot.forEach(async (doc) => {
+           await deleteDoc(doc.ref);
+       });
+
+       // Construiește referința către documentul grupului
+       const groupDocRef = doc(database, 'grupuri', selectedGroupId);
+       // Șterge documentul grupului din baza de date
+       await deleteDoc(groupDocRef);
+
+       // Actualizează starea locală pentru a reflecta ștergerea grupului
+       setGroups(groups.filter(group => group.id !== selectedGroupId));
       // Opcional: afișează un mesaj de succes sau efectuează alte acțiuni necesare
       console.log('Grupul a fost șters cu succes!');
 
       // Închide modalul după ștergere
       setIsOpenModal(false);
-    } catch (error) {
+  } catch (error) {
       console.error('Eroare la ștergerea grupului:', error);
-    }
-  };
+  }
+};
 // EXTINDERE DESCRIERE GRUP//
 
 const [expandedItems, setExpandedItems] = useState({});
@@ -176,6 +188,7 @@ const [currentGroupName, setCurrentGroupName] = useState("Grupuri de chat");
   const handleGroupClick = (group) => {
 
       setSelectedGroup(group);
+      setSelectedGroupId(group.id); 
       setCurrentGroupName(group.name);
       if (group.type === 'private') {
         if (group.createdBy === user.uid) {
@@ -397,7 +410,7 @@ const [currentGroupName, setCurrentGroupName] = useState("Grupuri de chat");
       {showConversation ? (
         <div>
          
-          <ChatRoom/>
+         {selectedGroupId && <ChatRoom groupId={selectedGroupId} />}
           <button onClick={handleBackButtonClick}>Înapoi</button>
         </div>
       ) : (
