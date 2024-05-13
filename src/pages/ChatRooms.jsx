@@ -14,7 +14,7 @@ import { database } from "../firebase.js";
 import { getDoc, collection, getDocs, doc, addDoc, deleteDoc, setDoc, onSnapshot } from "firebase/firestore"
 import Modal from "../components/Modal.js";
 import Login from "./Login.jsx";
-
+import ChatRoom from "../components/ChatRoom.jsx";
 
 export default function Home() {
   const user = auth.currentUser;
@@ -396,8 +396,8 @@ const [currentGroupName, setCurrentGroupName] = useState("Grupuri de chat");
   <div>
       {showConversation ? (
         <div>
-          <h2>Conversația grupului: {selectedGroup.name}</h2>
-          {/* Aici poți afișa conversația grupului */}
+         
+          <ChatRoom/>
           <button onClick={handleBackButtonClick}>Înapoi</button>
         </div>
       ) : (

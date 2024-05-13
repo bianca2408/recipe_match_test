@@ -7,7 +7,7 @@ const Modal = ({ isOpen, onClose, onConfirm }) => {
     isOpen && (
       <div className="modal-overlay">
         <div className="modal">
-          <p>Sigur dorești să ștergi această rețetă?</p>
+          <p>Sigur dorești să ștergi?</p>
           <button className='buton-modal' onClick={onConfirm}>Da</button>
           <button className='buton-modal' onClick={onClose}>Nu</button>
         </div>
