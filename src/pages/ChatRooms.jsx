@@ -415,6 +415,7 @@ const [currentGroupName, setCurrentGroupName] = useState("Grupuri de chat");
         </div>
       ) : (
           <div>
+          
       <ul>
         {groups.filter(group => group.createdBy !== user.uid).map((group) => (
           <li key={group.id} className="group-item" onClick={() => handleGroupClick(group)}>
@@ -480,7 +481,7 @@ const [currentGroupName, setCurrentGroupName] = useState("Grupuri de chat");
         <div className="success-message">Grupul a fost creat cu succes!</div>
       )}
                <div>
-      
+               {!showConversation && (
       <ul>
       {groups.filter(group => group.createdBy === user.uid).map((group) => (
     <li key={group.id} className={`group-item ${selectedGroup && selectedGroup.id === group.id ? 'active' : ''}`} onClick={() => handleGroupClick(group)}>
@@ -514,6 +515,7 @@ const [currentGroupName, setCurrentGroupName] = useState("Grupuri de chat");
       />
 
       </ul>
+      )}
     </div>      
       </div>
     </div>

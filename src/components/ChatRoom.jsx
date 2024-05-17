@@ -4,7 +4,7 @@ import { database, auth, storage } from '../firebase.js'; // Importă instanța 
 import '../ChatRoom.css'
 import EmojiPicker from 'emoji-picker-react'
 import profile from '../assets/profile.png';
-import { getDownloadURL, ref } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 const ChatRoom = ({ groupId }) => {
     
@@ -14,6 +14,7 @@ const ChatRoom = ({ groupId }) => {
     const [text, setText] = useState('');
     const [userImageUrls, setUserImageUrls] = useState({}); // Stocăm URL-urile imaginilor utilizatorilor
     const endRef = useRef(null);
+    const fileInputRef = useRef(null); // Referința către input-ul de fișiere
 
     useEffect(() => {
         const messagesRef = collection(database, 'grupuri', groupId, 'chats');
@@ -72,6 +73,36 @@ const ChatRoom = ({ groupId }) => {
             console.error('Error sending message:', error);
         }
     };
+
+    const handleImageClick = () => {
+        fileInputRef.current.click(); // Simulăm click-ul pe input-ul de fișiere
+    };
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const storageRef = ref(storage, `images/${user.uid}/${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    // You can handle progress here if needed
+                }, 
+                (error) => {
+                    console.error('Upload failed:', error);
+                }, 
+                async () => {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    // Add the image URL to Firestore
+                    await addDoc(collection(database, 'grupuri', groupId, 'chats'), {
+                        imageUrl: downloadURL,
+                        timestamp: serverTimestamp(),
+                        userId: user.uid,
+                    });
+                }
+            );
+        }
+    };
     
     const formatDate = (timestamp) => {
         if (timestamp && timestamp.seconds) {
@@ -91,7 +122,8 @@ const ChatRoom = ({ groupId }) => {
                     <div className={`message ${message.userId === user.uid ? 'own' : ''}`} key={message.id}>
                         <img src={userImageUrls[message.userId] || profile} alt="Avatar" /> {/* Folosim profilul implicit în cazul în care nu avem un URL al imaginii */}
                         <div className='texts'>
-                            <p>{message.text}</p>
+                            {message.text && <p>{message.text}</p>}
+                            {message.imageUrl && <img src={message.imageUrl} alt="Uploaded" />}
                             <span>{formatDate(message.timestamp)}</span>
                         </div>
                     </div>
@@ -100,7 +132,14 @@ const ChatRoom = ({ groupId }) => {
             </div>
             <div className='bottom'>
                 <div className="icons">
-                    <box-icon name='image' ></box-icon>
+                    <box-icon name='image' onClick={handleImageClick}></box-icon>
+                    <input
+                        type='file'
+                        accept='image/*'
+                        ref={fileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                    />
                 </div>
                 <input
                     type='text'
