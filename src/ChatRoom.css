@@ -40,6 +40,7 @@
             height: 30px;
             border-radius: 50%;
             object-fit: cover;
+            cursor: pointer;
         }
             .texts{
                 flex: 1;

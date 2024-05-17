@@ -11,7 +11,7 @@ import { storage } from "../firebase.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../firebase.js";
 import { database } from "../firebase.js";
-import { getDoc, collection, getDocs, doc } from "firebase/firestore"
+import { getDoc, collection, getDocs, doc, updateDoc, arrayRemove } from "firebase/firestore"
 import Modal from "../components/Modal.js";
 import Login from "./Login.jsx";
 
@@ -117,6 +117,40 @@ export default function Home() {
     };
     fetchData();
   }, []);
+  //STERGERE RETETA DE LA FAVORITE//
+  const handleDelete = async (recipeId) => {
+    const userUid = localStorage.getItem("userUid");
+    const userDocRef = doc(database, "utilizatori", userUid);
+    try {
+      await updateDoc(userDocRef, {
+        favorite: arrayRemove(recipeId)
+      });
+      // Update the local state to remove the deleted recipe
+      setRecipes(recipes.filter(recipe => recipe.id !== recipeId));
+    } catch (error) {
+      console.error("Eroare la ștergerea rețetei din favorite:", error);
+    }
+  };
+//MODAL PENTRU CONFIRMARE STERGERE//
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [recipeToDelete, setRecipeToDelete] = useState(null);
+
+const openModal = (recipeId) => {
+  setRecipeToDelete(recipeId);
+  setIsModalOpen(true);
+};
+
+const closeModal = () => {
+  setIsModalOpen(false);
+  setRecipeToDelete(null);
+};
+
+const handleConfirmDelete = () => {
+  if (recipeToDelete) {
+    handleDelete(recipeToDelete);
+  }
+  closeModal();
+};
 
   return (
     <div>
@@ -245,12 +279,16 @@ export default function Home() {
                     <button onClick={() => handleView(recipe.id)}>
                       Vezi {recipe.viewing ? 'mai putin' : 'mai mult'}
                     </button>
+                    <button className="remove" style={{marginTop: '1rem'}} onClick={() => openModal(recipe.id)}>
+                      Sterge
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
+        <Modal isOpen={isModalOpen} onClose={closeModal} onConfirm={handleConfirmDelete} />
       </body>
     </div>
   );

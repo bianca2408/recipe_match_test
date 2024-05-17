@@ -11,7 +11,7 @@ import { storage } from "../firebase.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../firebase.js";
 import { database } from "../firebase.js";
-import { getDoc, collection, getDocs, doc, addDoc, deleteDoc, setDoc, onSnapshot } from "firebase/firestore"
+import { getDoc, collection, getDocs, doc, addDoc, deleteDoc, setDoc, onSnapshot, updateDoc, arrayUnion } from "firebase/firestore"
 import Modal from "../components/Modal.js";
 import Login from "./Login.jsx";
 import ChatRoom from "../components/ChatRoom.jsx";
@@ -57,6 +57,7 @@ const handleSubmit = async (e) => {
         description: groupDescription,
         type: groupType,
         password: groupType === 'private' ? password : null,
+        participants: []
       };
       await setDoc(groupDocRef, updatedGroupData, { merge: true }); // Actualizăm documentul grupului în Firebase
       console.log('Grupul a fost actualizat cu succes!');
@@ -185,11 +186,23 @@ const [showConversation, setShowConversation] = useState(false);
 const [passwordGroup, setPasswordGroup] = useState('');
 const [currentGroupName, setCurrentGroupName] = useState("Grupuri de chat");
   // Funcția pentru afișarea conversației grupului selectat
-  const handleGroupClick = (group) => {
+  const handleGroupClick = async (group) => {
 
       setSelectedGroup(group);
       setSelectedGroupId(group.id); 
       setCurrentGroupName(group.name);
+
+      try {
+        const groupDocRef = doc(database, 'grupuri', group.id);
+        // Update participants array to include current user's UID if not already present
+        await updateDoc(groupDocRef, {
+          participants: arrayUnion(user.uid)
+        });
+        console.log(`User ${user.uid} added to participants of group ${group.name}`);
+      } catch (error) {
+        console.error('Error updating participants:', error);
+      }
+
       if (group.type === 'private') {
         if (group.createdBy === user.uid) {
           // Dacă utilizatorul curent este cel care a creat grupul, afișează direct conversația grupului

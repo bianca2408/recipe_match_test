@@ -5,6 +5,7 @@ import '../ChatRoom.css'
 import EmojiPicker from 'emoji-picker-react'
 import profile from '../assets/profile.png';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import ImageModal from '../components/ImageModal.jsx'; // Importăm componenta modal
 
 const ChatRoom = ({ groupId }) => {
     
@@ -13,6 +14,7 @@ const ChatRoom = ({ groupId }) => {
     const [open, setOpen] = useState(false);
     const [text, setText] = useState('');
     const [userImageUrls, setUserImageUrls] = useState({}); // Stocăm URL-urile imaginilor utilizatorilor
+    const [selectedImageUrl, setSelectedImageUrl] = useState(null); // Stare pentru URL-ul imaginii selectate
     const endRef = useRef(null);
     const fileInputRef = useRef(null); // Referința către input-ul de fișiere
 
@@ -103,6 +105,14 @@ const ChatRoom = ({ groupId }) => {
             );
         }
     };
+
+    const handleImageOpen = (imageUrl) => {
+        setSelectedImageUrl(imageUrl);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedImageUrl(null);
+    };
     
     const formatDate = (timestamp) => {
         if (timestamp && timestamp.seconds) {
@@ -111,6 +121,11 @@ const ChatRoom = ({ groupId }) => {
             return date.toLocaleDateString('ro-RO', options);
         } else {
             return ''; // sau o valoare implicită pentru cazurile în care timestamp este null sau nu are proprietatea seconds
+        }
+    };
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSubmit(e);
         }
     };
     
@@ -123,7 +138,7 @@ const ChatRoom = ({ groupId }) => {
                         <img src={userImageUrls[message.userId] || profile} alt="Avatar" /> {/* Folosim profilul implicit în cazul în care nu avem un URL al imaginii */}
                         <div className='texts'>
                             {message.text && <p>{message.text}</p>}
-                            {message.imageUrl && <img src={message.imageUrl} alt="Uploaded" />}
+                            {message.imageUrl && <img src={message.imageUrl} style={{cursor: 'pointer'}} alt="Uploaded" onClick={() => handleImageOpen(message.imageUrl)} />}
                             <span>{formatDate(message.timestamp)}</span>
                         </div>
                     </div>
@@ -132,7 +147,7 @@ const ChatRoom = ({ groupId }) => {
             </div>
             <div className='bottom'>
                 <div className="icons">
-                    <box-icon name='image' onClick={handleImageClick}></box-icon>
+                    <box-icon name='image' style={{cursor: 'pointer'}} onClick={handleImageClick}></box-icon>
                     <input
                         type='file'
                         accept='image/*'
@@ -146,6 +161,8 @@ const ChatRoom = ({ groupId }) => {
                     placeholder='Scrie un mesaj...'
                     value={text}
                     onChange={(e) => setText(e.target.value)}
+                    onKeyDown={handleKeyPress}
+                    
                 />
                 <div className="emoji" style={{zIndex: '100'}}>
                     <box-icon name='happy' onClick={() => setOpen((prev) => !prev)}></box-icon>
@@ -157,6 +174,7 @@ const ChatRoom = ({ groupId }) => {
                     Trimite
                 </button>
             </div>
+            {selectedImageUrl && <ImageModal imageUrl={selectedImageUrl} onClose={handleCloseModal} />}
         </div>
     );
 };
