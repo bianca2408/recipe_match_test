@@ -218,7 +218,7 @@ const errorMessage = error.message;
                             </Link>
                         </li>
                         <li className="nav-link">
-                        <Link to='/profile'>
+                        <Link to='/setari'>
                                 <box-icon name='cog' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Setări
@@ -318,6 +318,7 @@ const errorMessage = error.message;
         </nav>
       </div> */}
     </div>
+    
                         <Test  handleCheckboxChange={handleCheckboxChange}/>
                         {/* {currentRecipe && (
         <div className="recipe">

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 import { database, auth, storage } from '../firebase.js'; // Importă instanța de bază de date Firebase
-import '../ChatRoom.css'
+import '../Stilizare/ChatRoom.css'
 import EmojiPicker from 'emoji-picker-react'
 import profile from '../assets/profile.png';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';

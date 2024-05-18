@@ -12,8 +12,8 @@ import Login from './pages/Login'
 import Profile from './pages/profile';
 import  Chats  from './pages/ChatRooms';
 import Favorite from './pages/favorite';
-
-
+import Setari from './pages/Setari';
+import Test from './pages/TodoList.jsx'
 
 ReactDOM.render(
   <BrowserRouter>
@@ -23,8 +23,8 @@ ReactDOM.render(
       <Route index path='/favorite' element={<Favorite />}></Route>
       <Route index path='/chat' element={<Chats />}></Route>
       <Route index path='/profile' element={<Profile />}></Route>
-     
-     
+      <Route index path='/setari' element={<Setari />}></Route>
+      <Route index path='/test' element={<Test />}></Route>
 
 
     </Routes>

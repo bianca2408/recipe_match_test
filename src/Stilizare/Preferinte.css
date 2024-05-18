@@ -1,0 +1,88 @@
+.allergens-section {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #F5F5F5;
+}
+
+.allergens-section h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.allergens-section p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.allergens-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    background-color: #F5F5F5;
+    border-radius: 20px;
+    padding: 1rem;
+}
+
+.allergen {
+    display: inline-block;
+    width: 10em;
+    height: 10em;
+    margin: 1em 0.33em;
+    border: 0.5em solid #dadada;
+    border-radius: 6em;
+    position: relative;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: all 600ms ease, opacity 1ms;
+    transition-delay: 0s;
+    background: #fff;
+    color: #4a4a4a;
+    text-align: center; /* Adaugă alinierea textului la centru */
+    line-height: 10em; /* Setează înălțimea liniei la înălțimea elementului */
+}
+
+.allergen.selected {
+    background-color: #23ABA6; /* Schimbă culoarea de fundal la selectare */
+}
+
+.allergen.selected::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 0.5rem; /* Ajustează grosimea liniei */
+    background-color: #dadada;
+    transform: translate(-50%, -50%) rotate(45deg); /* Plasează linia diagonală */
+    border-radius: 2px; /* Rotunjirea marginilor liniei pentru a arăta mai bine */
+}
+
+.add-all-allergens-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.allergen-image {
+    width: 45px; /* Ajustează dimensiunile imaginii după preferințe */
+    height: 45px;
+   
+    display: block; /* Face imaginea să fie centrată */
+    margin-top: 1.5rem;
+  }
+  
+  
+  .allergen-elements{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    
+  }
+  .allergen span {
+    line-height: 3rem;
+    
+    
+  }

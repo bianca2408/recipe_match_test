@@ -1,6 +1,6 @@
 import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
 
-import "../Card.css";
+import "../Stilizare/Card.css";
 import { arrayUnion, collection, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import { database } from '../firebase';
 

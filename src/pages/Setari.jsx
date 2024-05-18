@@ -40,7 +40,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import Modal from "../components/Modal.js";
-
+import Preferinte from '../components/Preferinte.jsx'
 
 
 export default function Home(){
@@ -604,157 +604,9 @@ function handleSearch(event) {
             <div  className="main--content">
             <div className="header--wrapper">
 
-            <h2 style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '2px solid lightgray' }}>Rețetele mele</h2>
+            <h2 style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '2px solid lightgray' }}>Setări</h2>
 
-
-
-          <div className="recipes">
-  {recipes.map((recipe) => {
-    // Verifică dacă utilizatorul din rețetă este același cu utilizatorul curent
-    if (recipe.utilizator === user.uid) {
-      
-      return (
-        <div className="recipe" key={recipe.id}>
-          
-          {/* <h4>Postat de {recipe.utilizator}</h4> */}
-          
-          {recipe.imagine && <img src={recipe.imagine} alt={`Imagine pentru ${recipe.titlu}`} />}
-          <h3>{recipe.titlu}</h3>
-          
-
-          {recipe.viewing && (
-            <div>
-              <h4>Descriere</h4>
-              <p dangerouslySetInnerHTML={{ __html: recipe.descriere }}></p>
-              <h4>Ingrediente</h4>
-              <ul>
-                {recipe.ingrediente.map((ingredient, i) => (
-                  <li key={i}>{ingredient}</li>
-                ))}
-              </ul>
-              <h4>Instructiuni</h4>
-              <ol>
-                {recipe.instructiuni.map((step, i) => (
-                  <li key={i}>{step}</li>
-                ))}
-              </ol>
-            </div>
-          )}
-
-          <div className="buttons">
-            
-            <button onClick={() =>  handleView(recipe.id)}>
-              Vezi {recipe.viewing ? 'mai putin' : 'mai mult'}
-            </button>
-            <div className="edit-delete-buttons" >
-            <button onClick={() => handleEditClick(recipe)}>
-              Editeaza
-            </button>
-            <button className="remove" onClick={() => handleRemove(recipe.id)}>
-              Sterge
-            </button>
-          </div></div>
-          {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          onConfirm={handleConfirmRemove}
-          onClose={handleCloseModal}
-        />
-      )}
-        </div>
-      );
-    
-    
-    
-    
-    }
-
-    return null; // Returnează null pentru a ignora rețetele care nu corespund condiției
-  })}
-</div>
-
-       
-       {popupActive && <div className="popup">
-        <div className="popup-inner">
-        <h2 style={{textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px'}}>Adaugă o nouă rețetă</h2>
-          <form onSubmit={handleSubmit}>
-
-
-<div className="form-group">
-  <label>Titlu</label>
-  <input 
-    type="text" 
-    value={form.titlu} 
-    onChange={e => setForm({...form, titlu: e.target.value})} />
-</div>
-<div className="form-group">
-  <label>Imagine</label>
-  <input
-        type="file"
-        onChange={(event) => {
-          setImage(event.target.files[0]);
-          
-        }}
-      />
-     <button type="button" onClick={handleImageUpload}>
-    {imageUploaded ? 'Imagine încărcată' : 'Încarcă imaginea'}
-  </button>
-
-
-</div>
-<div className="form-group">
-  <label>Descriere</label>
-  <textarea 
-    type="text" 
-    value={form.descriere} 
-    onChange={e => setForm({...form, descriere: e.target.value})} />
-</div>
-
-<div className="form-group" style={{  justifyContent: 'center', alignItems: 'center' }}>
-  <label style={{ textAlign: 'center' }}>Ingrediente</label>
-  {
-    form.ingrediente.map((ingredient, i) => (
-      <div key={i}>
-      <select value={ingredient} onChange={(e) => handleIngredient(e, i)}>
-        <option value="">Alegeți un ingredient</option>
-        {filteredIngredients.map(ingrediente => (
-          <option key={ingrediente.id} value={ingrediente.nume_ingredient}>{ingrediente.nume_ingredient}</option>
-        ))}
-      </select>
-    </div>
-     
-    ))
-  }
-  <button type="button" onClick={handleIngredientCount}>Adaugă ingredient</button>
-</div>
-
-<div className="form-group" style={{  justifyContent: 'center', alignItems: 'center' }}>
-  <label style={{ textAlign: 'center' }}>Instrucțiuni</label>
-
-
-  {
-    form.instructiuni.map((step, i) => (
-      <textarea 
-        type="text"
-        key={i}
-        value={step} 
-        onChange={e => handleStep(e, i)} />
-    ))
-  }
-  <button type="button" onClick={handleStepCount}>Adaugă instrucțiune</button>
-</div>
-
-<div className="edit-delete-buttons">
-  <button onClick={uploadFile} type="submit">Publică Rețeta</button>
-  <button type="button" onClick={() => {setPopupActive(false); resetForm()}}>Închide</button>
-</div>
-
-</form>
-
-
-        </div>
-        </div>}
-      
+      <Preferinte/>
                
   </div>
                

@@ -15,6 +15,7 @@ import { getDoc, collection, getDocs, doc, addDoc, deleteDoc, setDoc, onSnapshot
 import Modal from "../components/Modal.js";
 import Login from "./Login.jsx";
 import ChatRoom from "../components/ChatRoom.jsx";
+import ParticipantsList from '../components/ParticipantsList.jsx';
 
 export default function Home() {
   const user = auth.currentUser;
@@ -379,7 +380,7 @@ const [currentGroupName, setCurrentGroupName] = useState("Grupuri de chat");
                             </Link>
                         </li>
                         <li className="nav-link">
-                        <Link to='/profile'>
+                        <Link to='/setari'>
                                 <box-icon name='cog' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Setări
@@ -529,6 +530,8 @@ const [currentGroupName, setCurrentGroupName] = useState("Grupuri de chat");
 
       </ul>
       )}
+      {showConversation && <ParticipantsList groupId={selectedGroupId} />}
+      
     </div>      
       </div>
     </div>

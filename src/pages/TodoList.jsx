@@ -224,3 +224,55 @@
 
 // export default Cards;
 
+import React, { useState } from 'react';
+import '../Stilizare/Preferinte.css'
+
+const Preferinte = () => {
+  const [selectedAllergens, setSelectedAllergens] = useState([]);
+  const allAllergens = [
+    { name: 'GLUTEN-FREE', id: 'gluten-free' },
+    { name: 'WHEAT-FREE', id: 'wheat-free' },
+    { name: 'DAIRY-FREE', id: 'dairy-free' },
+    { name: 'PEANUT-FREE', id: 'peanut-free' },
+    { name: 'TREE NUT-FREE', id: 'tree-nut-free' },
+    { name: 'SEAFOOD-FREE', id: 'seafood-free' },
+    { name: 'SULFITE-FREE', id: 'sulfite-free' },
+    { name: 'SOY-FREE', id: 'soy-free' },
+    { name: 'SESAME-FREE', id: 'sesame-free' },
+    { name: 'EGG-FREE', id: 'egg-free' },
+  ];
+
+  const handleAllergenClick = (allergen) => {
+    const newSelectedAllergens = selectedAllergens.includes(allergen)
+      ? selectedAllergens.filter((a) => a !== allergen)
+      : [...selectedAllergens, allergen];
+    setSelectedAllergens(newSelectedAllergens);
+  };
+
+  const handleAddAllergiesClick = () => {
+    setSelectedAllergens(allAllergens.map((allergen) => allergen.id));
+  };
+
+  return (
+    <div className="allergens-section">
+      <h2>Alergii</h2>
+      <p>Selectați din alergiile de mai jos și vom afișa doar rețetele care se potrivesc.</p>
+      <div className="allergens-list">
+        {allAllergens.map((allergen) => (
+          <div
+            key={allergen.id}
+            className={`allergen ${selectedAllergens.includes(allergen.id) ? 'selected' : ''}`}
+            onClick={() => handleAllergenClick(allergen.id)}
+          >
+            {allergen.name}
+          </div>
+        ))}
+      </div>
+      <button className="add-all-allergens-button" onClick={handleAddAllergiesClick}>
+        Adaugă toate alergiile
+      </button>
+    </div>
+  );
+};
+
+export default Preferinte;

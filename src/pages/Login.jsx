@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { auth, database } from '../firebase';
-import '../Login.css';
+import '../Stilizare/Login.css';
 import { sendEmailVerification, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, getAuth, onAuthStateChanged } from "firebase/auth";
 import { signInWithGooglePopup } from "../firebase";
-import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, where, getDoc } from 'firebase/firestore';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
@@ -25,13 +25,13 @@ const Login = () => {
         }
 
         const auth = getAuth();
-        onAuthStateChanged(auth, (user) =>{
-          if(user){
-            const uid =user.uid;
-            localStorage.setItem("userUid",uid);
-          }
-        }
-        )
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const uid = user.uid;
+                localStorage.setItem("userUid", uid);
+            }
+        });
+
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 navigate('/home');
@@ -45,17 +45,17 @@ const Login = () => {
     const handleSubmitsignup = (e) => {
         e.preventDefault();
         const auth = getAuth();
-        
+
         // Verificare dacă parolele coincid
         if (password !== confirmpassword) {
             alert('Parola și confirmarea parolei nu coincid!');
             return;
         }
-        
+
         // Verificare dacă numele de utilizator este deja folosit
         const usersRef = collection(database, 'utilizatori');
         const queryRef = query(usersRef, where('nume_utilizator', '==', username));
- 
+
         getDocs(queryRef)
             .then((querySnapshot) => {
                 if (!querySnapshot.empty) {
@@ -93,7 +93,7 @@ const Login = () => {
                     displayName: username
                 }).then(() => {
                     console.log("update username")
-                })
+                });
 
                 console.log("creat");
                 alert("cont creat");
@@ -105,8 +105,28 @@ const Login = () => {
     }
 
     const logGoogleUser = async () => {
-        const response = await signInWithGooglePopup();
-        navigate('/home');
+        try {
+            const response = await signInWithGooglePopup();
+            const user = response.user;
+
+            localStorage.setItem("userUid", user.uid);
+            // Verifică dacă utilizatorul există deja în colecția 'utilizatori'
+            const userDocRef = doc(database, "utilizatori", user.uid);
+            const userDoc = await getDoc(userDocRef);
+
+            if (!userDoc.exists()) {
+                // Dacă utilizatorul nu există, adaugă-l în colecția 'utilizatori'
+                await setDoc(userDocRef, {
+                    nume_utilizator: user.displayName || "Utilizator Google",
+                    email: user.email,
+                   
+                });
+            }
+
+            navigate('/home');
+        } catch (error) {
+            console.error("Eroare la autentificarea cu Google: ", error);
+        }
     }
 
     // Funcție pentru validarea adresei de e-mail,
@@ -130,7 +150,7 @@ const Login = () => {
                             <input type="password" value={password} name="pswd" placeholder="Parolă" required="" onChange={(e) => setPassword(e.target.value)} />
                             <input type="password" value={confirmpassword} name="pswd" placeholder="Confirmare Parolă" required="" onChange={(e) => setConfirmPassword(e.target.value)} />
                             <button>Înregistrează-te</button>
-                            <button onClick={logGoogleUser}>Google</button>
+                            <button type="button" onClick={logGoogleUser}>Google</button>
                         </form>
                     </div>
                     <div className="login">
@@ -145,7 +165,7 @@ const Login = () => {
                 </div>
             </div>
         </div>
-    )
+    );
 };
 
 export default Login;

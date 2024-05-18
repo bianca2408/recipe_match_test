@@ -1,6 +1,6 @@
 // Modal.js
 import React from 'react';
-import '../Modal.css';
+import '../Stilizare/Modal.css';
 
 const Modal = ({ isOpen, onClose, onConfirm }) => {
   return (

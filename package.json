@@ -18,6 +18,7 @@
     "react-swipy": "^0.0.6",
     "react-tinder-card": "^1.6.4",
     "rn-tinder-card": "^1.7.0",
+    "unicons": "^0.0.3",
     "vue-tinder": "^2.0.3",
     "web-vitals": "^2.1.4"
   },

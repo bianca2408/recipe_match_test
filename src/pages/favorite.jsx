@@ -213,7 +213,7 @@ const handleConfirmDelete = () => {
                             </Link>
                         </li>
                         <li className="nav-link">
-                        <Link to='/profile'>
+                        <Link to='/setari'>
                                 <box-icon name='cog' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Setări

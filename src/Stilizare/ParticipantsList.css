@@ -1,0 +1,42 @@
+/* src/components/ParticipantsList.css */
+
+.participants-list {
+  background-color: #f0f0f0;
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s, cursor 0.3s;
+  display: flex;
+  flex-direction: column; /* Schimbă direcția elementelor la vertical */
+  align-items: flex-start; /* Așază elementele de-a lungul axei transversale */
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  margin-top: 1rem;
+  border: 1px solid #ccc;
+  }
+  
+  .participant {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    width: 100%;
+  }
+  
+  .participant-photo {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+  
+  .participant-name {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  /* Optional: Stilizare pentru a arăta o linie între participanți */
+  .participant + .participant {
+    border-top: 1px solid #ccc;
+    padding-top: 8px;
+  }
+  
