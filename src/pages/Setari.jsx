@@ -41,7 +41,7 @@ import {
 } from "firebase/storage";
 import Modal from "../components/Modal.js";
 import Preferinte from '../components/Preferinte.jsx'
-
+import PreferinteIngrediente from '../components/PreferinteIngrediente.jsx'
 
 export default function Home(){
     const user = auth.currentUser;
@@ -607,6 +607,7 @@ function handleSearch(event) {
             <h2 style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '2px solid lightgray' }}>Setări</h2>
 
       <Preferinte/>
+      <PreferinteIngrediente/>
                
   </div>
                
