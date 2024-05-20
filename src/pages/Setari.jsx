@@ -42,7 +42,7 @@ import {
 import Modal from "../components/Modal.js";
 import Preferinte from '../components/Preferinte.jsx'
 import PreferinteIngrediente from '../components/PreferinteIngrediente.jsx'
-
+import IngredienteNedorite from '../components/IngredienteNedorite.jsx';
 export default function Home(){
     const user = auth.currentUser;
     const inputFileRef = useRef();
@@ -608,6 +608,7 @@ function handleSearch(event) {
 
       <Preferinte/>
       <PreferinteIngrediente/>
+      <IngredienteNedorite/>
                
   </div>
                

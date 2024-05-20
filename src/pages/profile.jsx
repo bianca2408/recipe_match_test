@@ -579,7 +579,7 @@ function handleSearch(event) {
                     </div>
                     <div className="bottom-content">
                     <li className="">
-                    <Link to='/profile'>
+                    <Link to='/'>
                             <box-icon onClick={handleLogOut} name='log-out' class="icon"></box-icon>
                                 <span onClick={handleLogOut} className="text nav-text">
                                     Deconectare

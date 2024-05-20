@@ -1,0 +1,161 @@
+.disliked-ingredients-section {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #F5F5F5;
+}
+
+.disliked-ingredients-section h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.disliked-ingredients-section p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+@keyframes slideInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideOutToTop {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.ingredients-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    background-color: #F5F5F5;
+    border-radius: 20px;
+    padding: 1rem;
+    animation-fill-mode: forwards;
+}
+
+.ingredients-list.hidden {
+    animation: slideOutToTop 0.5s ease-out;
+}
+
+.ingredients-list.visible {
+    animation: slideInFromTop 0.5s ease-out;
+}
+
+.hidden-container {
+    display: none;
+}
+
+.ingredient {
+    display: inline-block;
+    width: 10em;
+    margin: 1em 0.33em;
+    border: 0.5em solid #dadada;
+    border-radius: 10px; /* Border-radius ajustat pentru aspectul dreptunghiular */
+    position: relative;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: all 600ms ease, opacity 1ms;
+    transition-delay: 0s;
+    background: #fff;
+    color: #4a4a4a;
+    text-align: center;
+    line-height: normal;
+}
+
+.ingredient:not(.selected):hover {
+    border: 0.5em solid #d9534f;
+}
+
+.ingredient.selected {
+    background-color: #d9534f;
+    color: white;
+}
+
+.add-all-ingredients-button {
+    padding: 10px 20px;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.ingredient-elements {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ingredient span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 16px;
+}
+
+.disliked-ingredient {
+    display: inline-block;
+    padding: 10px;
+    width: 10em;
+    margin: 1em 0.33em;
+    border: 0.5em solid #F5F5F5;
+    border-radius: 6em;
+    position: relative;
+    font-size: 0.9375rem;
+    background: #d9534f;
+    color: white;
+    text-align: center;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.disliked-ingredient .ingredient-image {
+    width: 45px;
+    height: 45px;
+    display: block;
+    margin-top: 1.5rem;
+}
+
+.disliked-ingredient span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 16px;
+}
+
+.disliked-ingredient:hover .delete-icon {
+    display: block;
+}
+
+.delete-icon {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    background-color: red;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 24px;
+    color: white;
+}
+
+.delete-icon:hover {
+    background-color: darkred;
+}

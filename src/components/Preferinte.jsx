@@ -18,7 +18,7 @@ const Allergens = () => {
   const [selectedAllergens, setSelectedAllergens] = useState([]);
   const [showAdditionalAllergens, setShowAdditionalAllergens] = useState(false);
   const [animating, setAnimating] = useState(false);
-
+  const userUid = localStorage.getItem("userUid");
   const allAllergens = [
     { name: 'OUĂ', id: 'oua', image: eggImage },
     { name: 'LACTATE', id: 'lactate', image: dairyImage },
@@ -57,7 +57,7 @@ const Allergens = () => {
   useEffect(() => {
     const fetchUserAllergies = async () => {
       try {
-        const userDocRef = doc(database, 'utilizatori', user.uid);
+        const userDocRef = doc(database, 'utilizatori', userUid);
         const userDocSnapshot = await getDoc(userDocRef);
         if (userDocSnapshot.exists()) {
           const userData = userDocSnapshot.data();
@@ -73,12 +73,12 @@ const Allergens = () => {
     };
 
     fetchUserAllergies();
-  }, [user.uid]);
+  }, [userUid]);
 
   useEffect(() => {
     const updateUserAllergies = async () => {
       try {
-        const userDocRef = doc(database, 'utilizatori', user.uid);
+        const userDocRef = doc(database, 'utilizatori', userUid);
         const userDocSnapshot = await getDoc(userDocRef);
         if (userDocSnapshot.exists()) {
           await updateDoc(userDocRef, { alergii: selectedAllergens });
@@ -91,7 +91,7 @@ const Allergens = () => {
     };
 
     updateUserAllergies();
-  }, [selectedAllergens, user.uid]);
+  }, [selectedAllergens, userUid]);
   const handleRemoveSelectedAllergen = (allergenIdToRemove) => {
     const updatedSelectedAllergens = selectedAllergens.filter((allergenId) => allergenId !== allergenIdToRemove);
     setSelectedAllergens(updatedSelectedAllergens);
