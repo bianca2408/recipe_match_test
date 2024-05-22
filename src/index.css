@@ -9,14 +9,15 @@
 :root{
   /* Colors */
   --body-color: rgb(225, 32, 32);
+  --header-color: #23ABA6;
   --sidebar--color: #A8EDDA;
   --primary-color:#6361B5 ;
- /* linear-gradient(315deg, #ffffff 0%, #a562e6 74%) */
   --primary-color-light: #F6F5FF;
   --toggle-color: #DDD;
   --text-color: #707070;
  
-  
+   /* --primary-color: #F6F193; */
+ /* linear-gradient(315deg, #ffffff 0%, #a562e6 74%) */
   --tran-02: all 0.2s ease;
   --tran-03: all 0.3s ease;
   --tran-04: all 0.4s ease;
@@ -26,8 +27,7 @@ body {
   height: 100vh;
   /* background: #E4E9F7; */
   background: linear-gradient(110deg, #23ABA6 50%, #63C9BE 50%, #63C9BE 52%, #A8EDDA 52%, #A8EDDA 0);
-  /* background: linear-gradient(110deg, #62e6a5 50%, #9ae7ba 50%, #9ae7ba 52%, #d1f5de 52%, #d1f5de 0); */
-  transition: var(--tran-05);
+  background: linear-gradient(110deg, #23ABA6 50%, #63C9BE 50%, #63C9BE 52%, #A8EDDA 52%, #A8EDDA 0);transition: var(--tran-05);
 }
 body.dark{
   --body-color: #18191A;
@@ -365,7 +365,7 @@ body.dark .switch::before{
   align-items: center;
   justify-content: space-between;
   border-radius: 20px;
-  background: #23ABA6;
+  background: var(--header-color);
   padding: 10px;
   border-bottom-left-radius: 0% ;
   border-bottom-right-radius: 0% ;
@@ -873,6 +873,18 @@ textarea {
   cursor: pointer;
 }
 
+.errorMessage {
+  color: white;
+  text-align: center;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: red;
+  font-size: 18px; /* dimensiunea fontului */
+  font-weight: bold; /* textul îngroșat */
+  margin-top: 10px; /* spațiu deasupra mesajului */
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
 
 /* MENIU LA POZA DE PROFIL */
 /* 

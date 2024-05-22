@@ -459,7 +459,7 @@ const [editMode, setEditMode] = useState(false);
   };
   const userUid = localStorage.getItem("userUid");
   const docRef = doc(database, "utilizatori", userUid);
-
+  
 // Obținerea datelor din document
 getDoc(docRef)
   .then((docSnapshot) => {
@@ -504,6 +504,9 @@ const filteredIngredients = ingrediente.filter(ingredient =>
 function handleSearch(event) {
   setSearchTerm(removeDiacritics(event.target.value));
 }
+const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [dislikedIngredients, setDislikedIngredients] = useState([]);
+
     return( 
         <div>
           {/* DACA USERUL NU ESTE LOGAT -  LOGIN PAGE */}
@@ -607,8 +610,16 @@ function handleSearch(event) {
             <h2 style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '2px solid lightgray' }}>Setări</h2>
 
       <Preferinte/>
-      <PreferinteIngrediente/>
-      <IngredienteNedorite/>
+      <PreferinteIngrediente
+        dislikedIngredients={dislikedIngredients}
+        selectedIngredients={selectedIngredients}
+        setSelectedIngredients={setSelectedIngredients}
+      />
+      <IngredienteNedorite
+        dislikedIngredients={dislikedIngredients}
+        selectedIngredients={selectedIngredients}
+        setDislikedIngredients={setDislikedIngredients}
+      />
                
   </div>
                

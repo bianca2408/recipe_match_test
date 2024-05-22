@@ -3,8 +3,8 @@ import { database, auth } from '../firebase';
 import { doc, getDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
 import '../Stilizare/IngredienteNedorite.css';
 
-const IngredienteNedorite = () => {
-  const [dislikedIngredients, setDislikedIngredients] = useState([]);
+const IngredienteNedorite = ({ dislikedIngredients, setDislikedIngredients,  selectedIngredients }) => {
+
   const [showAdditionalIngredients, setShowAdditionalIngredients] = useState(false);
   const [animating, setAnimating] = useState(false);
   const [allIngredients, setAllIngredients] = useState([]);
@@ -62,6 +62,10 @@ const IngredienteNedorite = () => {
   }, [dislikedIngredients, userUid]);
 
   const handleIngredientClick = (ingredientId) => {
+    if ( selectedIngredients.includes(ingredientId)) {
+      // Dacă este, nu face nimic
+      return;
+    }
     const newDislikedIngredients = dislikedIngredients.includes(ingredientId)
       ? dislikedIngredients.filter(id => id !== ingredientId)
       : [...dislikedIngredients, ingredientId];
@@ -134,5 +138,6 @@ const IngredienteNedorite = () => {
     </div>
   );
 };
+
 
 export default IngredienteNedorite;

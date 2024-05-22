@@ -3,8 +3,8 @@ import { database, auth } from '../firebase';
 import { doc, getDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
 import '../Stilizare/PreferinteIngrediente.css';
 
-const PreferinteIngrediente = () => {
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
+const PreferinteIngrediente = ({ dislikedIngredients, selectedIngredients,  setSelectedIngredients }) => {
+
   const [showAdditionalIngredients, setShowAdditionalIngredients] = useState(false);
   const [animating, setAnimating] = useState(false);
   const [allIngredients, setAllIngredients] = useState([]);
@@ -62,6 +62,10 @@ const PreferinteIngrediente = () => {
   }, [selectedIngredients, userUid]);
 
   const handleIngredientClick = (ingredientId) => {
+    if (dislikedIngredients.includes(ingredientId)) {
+      // Dacă este, nu face nimic
+      return;
+    }
     console.log('Clicked Ingredient ID:', ingredientId);
     const newSelectedIngredients = selectedIngredients.includes(ingredientId)
       ? selectedIngredients.filter(id => id !== ingredientId)

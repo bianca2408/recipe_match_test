@@ -10,7 +10,7 @@ import '../index.js';
 import Button from '../components/Button';
 import Card from '../components/Card'
 import Test from './filters.jsx'
-
+import RecipeList from '../components/RecipeList.jsx';
 
 import logo from '../assets/logo.png';
 import profile from '../assets/profile.png';
@@ -36,8 +36,27 @@ async function fetchDataFromFirestore(){
     });
     return data;
     }
-
+//AFISARE RETETE PE BAZA FILTRU//
+    async function fetchRecipesFromFirestore(selectedIngredients) {
+      if (selectedIngredients.length === 0) {
+       
+        return []; // Returnează un array gol dacă nu sunt selectate ingrediente
+      }
     
+      const selectedIngredientIds = selectedIngredients.map(ingredient => ingredient.id);
+      
+    
+      const recipesQuery = query(
+        collection(database, "retete_utilizator"),
+        where("ingrediente", "array-contains-any", selectedIngredientIds)
+      );
+    
+      const querySnapshot = await getDocs(recipesQuery);
+      const recipes = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    
+      
+      return recipes;
+    }
 
 export default function Home(){
 
@@ -46,7 +65,25 @@ export default function Home(){
     const [recipes, setRecipes] = useState([]);
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [selectedIngredients, setSelectedIngredients] = useState([]);
-  
+    const [ingrediente, setIngrediente] = useState([]);
+    const [hasFetchedRecipes, setHasFetchedRecipes] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [loading, setLoading] = useState(false); // Adăugăm o stare pentru a urmări încărcarea datelor
+
+  //FILTRU INGREDIENTE AFISARE RETETE//
+    useEffect(() => {
+      async function fetchRecipes() {
+        setLoading(true); // Setăm starea de încărcare la true
+        const recipesData = await fetchRecipesFromFirestore(selectedIngredients);
+        
+        setRecipes(recipesData);
+        setHasFetchedRecipes(true); // Setăm că s-au descărcat rețetele
+        setLoading(false); // Setăm starea de încărcare la false după ce am primit rezultatele
+      
+      }
+      
+      fetchRecipes();
+    }, [selectedIngredients]);
   // CONSTANTE PENTRU AFISARE MENIU LA APASAREA POZEI DE PROFIL PE HOME
     const [menuOpened, setMenuOpened] = useState(false); // Starea pentru a urmări dacă meniul este deschis sau închis
     const toggleMenu = () => {
@@ -262,38 +299,14 @@ const errorMessage = error.message;
                
                 {/* <Cards /> */}
                 <evil-tinder></evil-tinder>
-
-                <div className="recipes">
-              {selectedIngredients.map((recipe) => (
-                <div className="recipe" key={recipe.id}>
-                  {recipe.imagine && <img src={recipe.imagine} alt={`Imagine pentru ${recipe.titlu}`} />}
-                  <h3>{recipe.titlu}</h3>
-                  {recipe.viewing && (
-                    <div>
-                      <h4>Descriere</h4>
-                      <p dangerouslySetInnerHTML={{ __html: recipe.descriere }}></p>
-                      <h4>Ingrediente</h4>
-                      <ul>
-                        {recipe.ingrediente.map((ingredient, i) => (
-                          <li key={i}>{ingredient}</li>
-                        ))}
-                      </ul>
-                      <h4>Instructiuni</h4>
-                      <ol>
-                        {recipe.instructiuni.map((step, i) => (
-                          <li key={i}>{step}</li>
-                        ))}
-                      </ol>
-                    </div>
-                  )}
-                  <div className="buttons">
-                    <button onClick={() => handleView(recipe.id)}>
-                      Vezi {recipe.viewing ? 'mai putin' : 'mai mult'}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+            {/* Verificăm dacă au fost selectate ingrediente și dacă s-au descărcat rețetele */}
+        {(selectedIngredients.length > 0 && hasFetchedRecipes && !loading) ? (
+          recipes.length > 0 ? (
+            <RecipeList recipes={recipes} />
+          ) : (
+            <p className="errorMessage">Nu există rețete disponibile pentru ingredientele selectate.</p>
+          )
+        ) : null}
            </div>
                 
                 
@@ -319,7 +332,16 @@ const errorMessage = error.message;
       </div> */}
     </div>
     
-                        <Test  handleCheckboxChange={handleCheckboxChange}/>
+    <Test 
+        setSelectedIngredients={setSelectedIngredients} 
+        selectedIngredients={selectedIngredients}
+        setSearchTerm={setSearchTerm}
+        searchTerm={searchTerm}
+        setIngrediente={setIngrediente}
+        ingrediente={ingrediente}
+        handleCheckboxChange={handleCheckboxChange} // Pasăm funcția de gestionare a selectării ingredientelor către componenta Test
+      />
+      
                         {/* {currentRecipe && (
         <div className="recipe">
          {currentRecipe && (
