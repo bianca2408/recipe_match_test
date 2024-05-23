@@ -196,7 +196,7 @@ useEffect(() =>{
     const [form, setForm] = useState({
       titlu: "",
       descriere: "",
-      ingrediente: [],
+      ingrediente: [{ ingredientName: "", quantity: "" }],
       instructiuni: [],
       imagine: "",
       utilizator: ""
@@ -262,31 +262,36 @@ useEffect(() =>{
   
      
   
+          // Resetare stări
       setPopupActive(false);
       setEditMode(false);
+      setFormTitle("Adaugă o nouă rețetă");
       setEditedRecipe(null);
+      resetForm();
     
-      setForm({
-        titlu: "",
-        descriere: "",
-        ingrediente: [],
-        instructiuni: [],
-        imagine: "",
-        utilizator: ""
-      })
+     
+      
     }
   
     
     const handleIngredient = (e, i) => {
-      const ingredientsClone = [...form.ingrediente]
-  
-      ingredientsClone[i] = e.target.value
-  
+      const ingredientsClone = [...form.ingrediente];
+      ingredientsClone[i] = { ingredientName: e.target.value, quantity: '' }; // Actualizare la un obiect care conține numele ingredientului și cantitatea inițială (sau o valoare golă)
       setForm({
         ...form,
         ingrediente: ingredientsClone
-      })
-    }
+      });
+    };
+    
+    const handleIngredientQuantity = (e, i) => {
+      const ingredientsClone = [...form.ingrediente];
+      ingredientsClone[i].quantity = e.target.value;
+      setForm({
+        ...form,
+        ingrediente: ingredientsClone,
+      });
+    };
+    
   
     const handleStep = (e, i) => {
       const stepsClone = [...form.instructiuni]
@@ -298,6 +303,24 @@ useEffect(() =>{
         instructiuni: stepsClone
       })
     }
+    const handleIngredientDelete = (index) => {
+      const ingredientsClone = [...form.ingrediente];
+      ingredientsClone.splice(index, 1);
+      setForm({
+        ...form,
+        ingrediente: ingredientsClone,
+      });
+    };
+    
+    const handleStepDelete = (index) => {
+      const stepsClone = [...form.instructiuni];
+      stepsClone.splice(index, 1);
+      setForm({
+        ...form,
+        instructiuni: stepsClone,
+      });
+    };
+    
   
     const handleIngredientCount = () => {
       
@@ -319,16 +342,17 @@ useEffect(() =>{
   text: "Incarca imaginea",
   color: "green"
 });
-
+const [formTitle, setFormTitle] = useState("Adaugă o nouă rețetă");
 const resetForm = () => {
   setForm({
     titlu: "",
     descriere: "",
-    ingrediente: [],
+    ingrediente: [{ ingredientName: "", quantity: "" }],
     instructiuni: [],
     imagine: "",
     utilizator: user.uid
   });
+
 };
     // INPUT IMAGINE PENTRU RETETE//
 const imagesListRef = ref(storage, "retete/");
@@ -446,16 +470,21 @@ const [editMode, setEditMode] = useState(false);
 
   const handleEditClick = (recipe) => {
     setEditMode(true);
+  setFormTitle("Modifică rețeta");
     setEditedRecipe(recipe);
     setPopupActive(true);
     setForm({
       titlu: recipe.titlu,
       descriere: recipe.descriere,
-      ingrediente: [...recipe.ingrediente],
+      ingrediente: recipe.ingrediente.map(ingredient => ({
+        ingredientName: ingredient.ingredientName,
+        quantity: ingredient.quantity
+      })),
       instructiuni: [...recipe.instructiuni],
       imagine: recipe.imagine,
       utilizator: recipe.utilizator,
     });
+    
   };
   const userUid = localStorage.getItem("userUid");
   const docRef = doc(database, "utilizatori", userUid);
@@ -623,23 +652,24 @@ function handleSearch(event) {
           
 
           {recipe.viewing && (
-            <div>
-              <h4>Descriere</h4>
-              <p dangerouslySetInnerHTML={{ __html: recipe.descriere }}></p>
-              <h4>Ingrediente</h4>
-              <ul>
-                {recipe.ingrediente.map((ingredient, i) => (
-                  <li key={i}>{ingredient}</li>
-                ))}
-              </ul>
-              <h4>Instructiuni</h4>
-              <ol>
-                {recipe.instructiuni.map((step, i) => (
-                  <li key={i}>{step}</li>
-                ))}
-              </ol>
-            </div>
-          )}
+  <div>
+    <h4>Descriere</h4>
+    <p dangerouslySetInnerHTML={{ __html: recipe.descriere }}></p>
+    <h4>Ingrediente</h4>
+    <ul>
+      {recipe.ingrediente.map((ingredient, i) => (
+        <li key={i}>{ingredient.ingredientName} - {ingredient.quantity}</li>
+      ))}
+    </ul>
+    <h4>Instrucțiuni</h4>
+    <ol>
+      {recipe.instructiuni.map((step, i) => (
+        <li key={i}>{step}</li>
+      ))}
+    </ol>
+  </div>
+)}
+
 
           <div className="buttons">
             
@@ -676,7 +706,7 @@ function handleSearch(event) {
        
        {popupActive && <div className="popup">
         <div className="popup-inner">
-        <h2 style={{textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px'}}>Adaugă o nouă rețetă</h2>
+        <h2 style={{textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px'}}>{formTitle}</h2>
           <form onSubmit={handleSubmit}>
 
 
@@ -713,18 +743,28 @@ function handleSearch(event) {
 <div className="form-group" style={{  justifyContent: 'center', alignItems: 'center' }}>
   <label style={{ textAlign: 'center' }}>Ingrediente</label>
   {
-    form.ingrediente.map((ingredient, i) => (
-      <div key={i}>
-      <select value={ingredient} onChange={(e) => handleIngredient(e, i)}>
+  form.ingrediente.map((ingredient, i) => (
+    <div key={i}>
+      <select value={ingredient.ingredientName} onChange={(e) => handleIngredient(e, i)}>
         <option value="">Alegeți un ingredient</option>
-        {filteredIngredients.map(ingrediente => (
-          <option key={ingrediente.id} value={ingrediente.nume_ingredient}>{ingrediente.nume_ingredient}</option>
+        {filteredIngredients.map((ingrediente) => (
+          <option key={ingrediente.id} value={ingrediente.nume_ingredient}>
+            {ingrediente.nume_ingredient}
+          </option>
         ))}
       </select>
+      <input
+        type="text"
+        placeholder="Cantitate"
+        value={ingredient.quantity}
+        onChange={(e) => handleIngredientQuantity(e, i)}
+      />
+      <button type="button" onClick={() => handleIngredientDelete(i)}>Elimină ingredient</button>
     </div>
-     
-    ))
-  }
+  ))
+}
+
+
   <button type="button" onClick={handleIngredientCount}>Adaugă ingredient</button>
 </div>
 
@@ -733,21 +773,24 @@ function handleSearch(event) {
 
 
   {
-    form.instructiuni.map((step, i) => (
-      <textarea 
-        type="text"
-        key={i}
-        value={step} 
-        onChange={e => handleStep(e, i)} />
-    ))
-  }
+  form.instructiuni.map((step, i) => (
+    <div key={i}>
+      <textarea type="text" key={i} value={step} onChange={(e) => handleStep(e, i)} />
+      <button type="button" onClick={() => handleStepDelete(i)}>Elimină instrucțiune</button>
+    </div>
+  ))
+}
   <button type="button" onClick={handleStepCount}>Adaugă instrucțiune</button>
 </div>
 
 <div className="edit-delete-buttons">
-  <button onClick={uploadFile} type="submit">Publică Rețeta</button>
-  <button type="button" onClick={() => {setPopupActive(false); resetForm()}}>Închide</button>
+  {/* Schimbă textul butonului și titlul formularului în funcție de modul de editare */}
+  <button onClick={uploadFile} type="submit">
+    {editMode ? 'Confirma modificari' : 'Publică Rețeta'}
+  </button>
+  <button type="button" onClick={() => {setPopupActive(false); resetForm(); setEditMode(false); setFormTitle("Adaugă o nouă rețetă");}}>Închide</button>
 </div>
+
 
 </form>
 
@@ -790,7 +833,7 @@ function handleSearch(event) {
           </label>
           <button  onClick={submitData}>Încarcă imagine profil</button>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <button onClick={() => setPopupActive(!popupActive)} class="add--recipe" >Adaugă rețetă
+                    <button onClick={() => {setPopupActive(!popupActive); resetForm()}} class="add--recipe" >Adaugă rețetă
                     </button>
                     <br></br>
                    
