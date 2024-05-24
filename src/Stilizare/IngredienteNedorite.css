@@ -44,7 +44,26 @@
     border-radius: 20px;
     padding: 1rem;
     animation-fill-mode: forwards;
+    max-height: 300px; /* Setează înălțimea maximă pentru lista de ingrediente */
+    overflow-y: auto; /* Permite scroll vertical */
+    box-sizing: border-box; /* Asigură că padding-ul este inclus în dimensiunea totală */
 }
+
+/* Stil pentru scrollbar */
+.ingredients-list::-webkit-scrollbar {
+  width: 12px;
+  background-color: #F5F5F5; /* Fundalul track-ului scrollbar-ului */
+}
+
+.ingredients-list::-webkit-scrollbar-thumb {
+  background-color: #606062; /* Culoarea thumb-ului scrollbar-ului */
+  border-radius: 10px;
+}
+
+.ingredients-list::-webkit-scrollbar-track {
+  background-color: #F5F5F5; /* Fundalul track-ului scrollbar-ului */
+}
+
 
 .ingredients-list.hidden {
     animation: slideOutToTop 0.5s ease-out;

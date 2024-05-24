@@ -40,10 +40,12 @@ import {
   deleteObject,
 } from "firebase/storage";
 import Modal from "../components/Modal.js";
+import ImageModal from '../components/ImageModal.jsx'; // Importăm componenta modal
 
 
 
-export default function Home(){
+
+export default function Profile(){
     const user = auth.currentUser;
     const inputFileRef = useRef();
   
@@ -499,7 +501,7 @@ getDoc(docRef)
       const userId = userUid;
 
       // // Actualizarea conținutului elementelor <span> cu clasele corespunzătoare
-      document.querySelector('.username').innerText = `Nume: ${numeUtilizator}`;
+      document.querySelector('.username').innerText = `Nume de utilizator: ${numeUtilizator}`;
       document.querySelector('.email').innerText = `Email: ${emailUtilizator}`;
       document.querySelector('.user-id').innerText = `User id: ${userId}`;
     } else {
@@ -533,6 +535,14 @@ const filteredIngredients = ingrediente.filter(ingredient =>
 function handleSearch(event) {
   setSearchTerm(removeDiacritics(event.target.value));
 }
+const [selectedImageUrl, setSelectedImageUrl] = useState(null); // Stare pentru URL-ul imaginii selectate
+const handleImageOpen = (imageUrl) => {
+  setSelectedImageUrl(imageUrl);
+};
+const handleCloseImageModal = () => {
+  setSelectedImageUrl(null);
+};
+
     return( 
         <div>
           {/* DACA USERUL NU ESTE LOGAT -  LOGIN PAGE */}
@@ -589,7 +599,7 @@ function handleSearch(event) {
                             </Link>
                         </li>
                         <li className="nav-link">
-                        <Link to='/profile'>
+                        <Link to='/frigider'>
                                 <box-icon name='fridge' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Frigider
@@ -637,71 +647,74 @@ function handleSearch(event) {
 
 
 
-          <div className="recipes">
-  {recipes.map((recipe) => {
-    // Verifică dacă utilizatorul din rețetă este același cu utilizatorul curent
-    if (recipe.utilizator === user.uid) {
+            <div className="recipes">
+  <ul className="cards">
+    {recipes.map((recipe) => {
+      // Verifică dacă utilizatorul din rețetă este același cu utilizatorul curent
+      if (recipe.utilizator === user.uid) {
+        return (
+          <li className="cards_item" key={recipe.id}>
+            <div className="card">
+              <div className="card_image">
+                {recipe.imagine && <img src={recipe.imagine} style={{cursor: 'pointer'}} alt={`Imagine pentru ${recipe.titlu}`} onClick={() => handleImageOpen(recipe.imagine)}/>}
+              </div>
+              <div className="card_content">
+                <h2 className="card_title">{recipe.titlu}</h2>
+                <div className="card_text">
+                  {recipe.descriere && (
+                    <div>
+                      <h4>Descriere</h4>
+                      <p dangerouslySetInnerHTML={{ __html: recipe.descriere }}></p>
+                    </div>
+                  )}
+                  <h4>Ingrediente</h4>
+                  <ul>
+                    {recipe.ingrediente.map((ingredient, i) => (
+                      <li key={i}>
+                        {ingredient.ingredientName} - {ingredient.quantity}
+                      </li>
+                    ))}
+                  </ul>
+                  <h4>Instrucțiuni</h4>
+                  <ol>
+                    {recipe.instructiuni.map((step, i) => (
+                      <li key={i}>{step}</li>
+                    ))}
+                  </ol>
+                </div>
+                
+              </div>
+            </div>
+           {/* Butonul de editare și ștergere pentru fiecare card în parte */}
+           <div className="buttons">
+              <div className="edit-delete-buttons">
+                <button onClick={() => handleEditClick(recipe)}>
+                  Editează
+                </button>
+                <button className="remove" onClick={() => handleRemove(recipe.id)}>
+                  Șterge
+                </button>
+              </div>
+            </div>
+          </li>
+        );
+      }
       
-      return (
-        <div className="recipe" key={recipe.id}>
-          
-          {/* <h4>Postat de {recipe.utilizator}</h4> */}
-          
-          {recipe.imagine && <img src={recipe.imagine} alt={`Imagine pentru ${recipe.titlu}`} />}
-          <h3>{recipe.titlu}</h3>
-          
+      return null; // Returnează null pentru a ignora rețetele care nu corespund condiției
+    })}
+  </ul>
+  {selectedImageUrl && <ImageModal imageUrl={selectedImageUrl} onClose={handleCloseImageModal} />}
+</div>
 
-          {recipe.viewing && (
-  <div>
-    <h4>Descriere</h4>
-    <p dangerouslySetInnerHTML={{ __html: recipe.descriere }}></p>
-    <h4>Ingrediente</h4>
-    <ul>
-      {recipe.ingrediente.map((ingredient, i) => (
-        <li key={i}>{ingredient.ingredientName} - {ingredient.quantity}</li>
-      ))}
-    </ul>
-    <h4>Instrucțiuni</h4>
-    <ol>
-      {recipe.instructiuni.map((step, i) => (
-        <li key={i}>{step}</li>
-      ))}
-    </ol>
-  </div>
+{isModalOpen && (
+  <Modal
+    isOpen={isModalOpen}
+    onConfirm={handleConfirmRemove}
+    onClose={handleCloseModal}
+  />
 )}
 
 
-          <div className="buttons">
-            
-            <button onClick={() =>  handleView(recipe.id)}>
-              Vezi {recipe.viewing ? 'mai putin' : 'mai mult'}
-            </button>
-            <div className="edit-delete-buttons" >
-            <button onClick={() => handleEditClick(recipe)}>
-              Editeaza
-            </button>
-            <button className="remove" onClick={() => handleRemove(recipe.id)}>
-              Sterge
-            </button>
-          </div></div>
-          {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          onConfirm={handleConfirmRemove}
-          onClose={handleCloseModal}
-        />
-      )}
-        </div>
-      );
-    
-    
-    
-    
-    }
-
-    return null; // Returnează null pentru a ignora rețetele care nu corespund condiției
-  })}
-</div>
 
        
        {popupActive && <div className="popup">
@@ -801,58 +814,35 @@ function handleSearch(event) {
                
   </div>
                
-                <div className="profile--wrapper">
-                    <div className="cardProfile">
-                       
-        <div className="file-upload">
-          {/* Ascundeți inputul real */}
-          <input
-            id="file-input" // Trebuie să fie aceeași cu id-ul "htmlFor" din label
-            type="file"
-            ref={inputFileRef}
-            style={{ display: 'none' }}
-            onChange={handleChange}
-          />
-          {/* Folosește o imagine sau alt element pentru a declanșa încărcarea */}
-          <label htmlFor="file-input">
-          <img
-            src={photoURL}
-              alt="Încarcă"
-            style={{
-              width: '100px',
-              height: '100px',
-              borderRadius: '50%',
-              borderWidth: '5px',
-              backgroundColor: '#FFF',
-              borderColor: 'grey',
-              borderStyle: 'outset',
-                
-              
-            }}
-/>
-          </label>
-          <button  onClick={submitData}>Încarcă imagine profil</button>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <button onClick={() => {setPopupActive(!popupActive); resetForm()}} class="add--recipe" >Adaugă rețetă
-                    </button>
-                    <br></br>
-                   
-  <span className="username" style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '1.5rem', color: 'black', marginTop: '20px' }}>Nume: </span>
-  <br />
-  <span className="email" style={{ textAlign: 'center',fontFamily: "Poppins, sans-serif", fontSize: '1.5rem', color: 'black' }}>Email: </span>
-  <br />
-  <span className="user-id" style={{ textAlign: 'center' }}>User id: </span>
+  <div className="profile--wrapper">
+    <div className="cardProfile">
+        <div className="card-header">
+            <input
+                id="file-input"
+                type="file"
+                ref={inputFileRef}
+                style={{ display: 'none' }}
+                onChange={handleChange}
+            />
+            <label htmlFor="file-input">
+                <img
+                    src={photoURL}
+                    alt="Profile Image"
+                    className="profile-img"
+                />
+            </label>
+        </div>
+        <div className="card-body">
+            <p className="username">Nume de utilizator: </p>
+            <a className="email">Email: </a>
+            <p className="user-id">User id: </p>
+            <button onClick={submitData}>Încarcă imagine profil</button>
+            <button onClick={() => { setPopupActive(!popupActive); resetForm(); }} className="add--recipe">Adaugă rețetă</button>
+        </div>
+    </div>
 </div>
 
-        </div>
-                    
-                    
-                    
-                    
-                    </div>
-                        
-                               
-            </div>
+
             </div>
        </body> 
 	

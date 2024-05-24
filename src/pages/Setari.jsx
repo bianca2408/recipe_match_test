@@ -43,7 +43,8 @@ import Modal from "../components/Modal.js";
 import Preferinte from '../components/Preferinte.jsx'
 import PreferinteIngrediente from '../components/PreferinteIngrediente.jsx'
 import IngredienteNedorite from '../components/IngredienteNedorite.jsx';
-export default function Home(){
+
+export default function Setari(){
     const user = auth.currentUser;
     const inputFileRef = useRef();
   
@@ -563,7 +564,7 @@ const [selectedIngredients, setSelectedIngredients] = useState([]);
                             </Link>
                         </li>
                         <li className="nav-link">
-                        <Link to='/profile'>
+                        <Link to='/frigider'>
                                 <box-icon name='fridge' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Frigider

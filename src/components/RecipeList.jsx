@@ -28,7 +28,7 @@ export default function RecipeList({ recipes }) {
                 <h4>Ingrediente</h4>
                 <ul>
                   {recipe.ingrediente.map((ingredient, i) => (
-                    <li key={i}>{ingredient}</li>
+                    <li key={i}>{ingredient.ingredientName} - {ingredient.quantity}</li>
                   ))}
                 </ul>
                 <h4>Instructiuni</h4>

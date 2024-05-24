@@ -15,6 +15,7 @@
   --primary-color-light: #F6F5FF;
   --toggle-color: #DDD;
   --text-color: #707070;
+  --recipe--color: #A8EDDA;
  
    /* --primary-color: #F6F193; */
  /* linear-gradient(315deg, #ffffff 0%, #a562e6 74%) */
@@ -330,7 +331,7 @@ body.dark .switch::before{
 .profile--wrapper{
   position: relative; 
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   left: 4rem;
   height: 100%;
   width: 30%;
@@ -460,17 +461,7 @@ body.dark .switch::before{
   box-shadow: 0px 10px 53px 0px rgba(0,0,0,0.3) !important;
   
 } */
-.cardProfile{
-  position: relative;
-  width: 100%;
-  height: auto;
-  border-radius: 20px;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
-  background: #ddd;
-  margin-top: 100px;
 
-}
 .profile_image{
   position: absolute;
   left: 5rem;
@@ -494,43 +485,281 @@ body.dark .switch::before{
   height: 100%;
   object-fit: cover;
 }
-.cardProfile .content{
+
+
+.cardProfile {
+  width: 100%;
+  margin: 4.5rem auto 0;
+  background-color: #42515a;
+  box-shadow: 0 10px 90px #00000024;
+  text-align: center;
+  font-size: 20px;
+  border-radius: 15px;
+  border-top-left-radius: 0%;
+  border-top-right-radius: 0%;
+  border-top: 2px solid lightgray;
+}
+
+.cardProfile .card-header {
   position: relative;
+  height: 48px;
+}
+
+.cardProfile .card-header .profile-img {
+  width: 130px;
+  height: 130px;
+  border-radius: 1000px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 8px solid #c74385;
+  box-shadow: 0 0 20px #00000033;
+}
+
+.cardProfile .card-header .profile-img:hover {
+  width: 180px;
+  height: 180px;
+  border: 8px solid #d885af;
+}
+
+.cardProfile .card-body {
+  padding: 10px 40px;
+}
+
+.cardProfile .card-body .username {
+  margin-top: 30px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #c74385;
+}
+
+.cardProfile .card-body .username:hover {
+  font-size: 24px;
+  color: #d885af;
+}
+
+.cardProfile .card-body .email {
+  font-size: 14px;
+  color: #c2bdbd;
+}
+
+.cardProfile .card-body .email:hover {
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.cardProfile .card-body .user-id {
+  font-size: 14px;
+  color: #c2bdbd;
+  margin-top: 10px;
+}
+
+.cardProfile .card-body .user-id:hover {
+  color: #ffffff;
+}
+
+.cardProfile .card-body button {
+  margin-top: 10px;
+  background-color: #c74385;
+  color: #ffffff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.cardProfile .card-body button:hover {
+  background-color: #d885af;
+}
+
+@media screen and (max-width: 575px) {
+  .cardProfile {
+      width: 96%;
+  }
+
+  .cardProfile .card-body {
+      padding: 10px 20px;
+  }
+}
+
+/* RETETE AFISAJ PROFIL */
+.recipes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1024px;
+  margin: 2rem auto 0;
+  padding: 1rem;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: auto;
+  padding: 0;
+  gap: 1.5rem; /* Distanță între carduri */
+}
+
+.cards_item {
+  flex: 1 1 calc(30% - 1.5rem); /* Lățimea cardurilor mărită */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin: 1.5rem 0;
+  background-color: rgba(0, 0, 0, 0); /* Fundal transparent */
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.25));
+  min-width: 20rem; /* Lățime minimă pentru carduri */
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-left: 30px;
+  background: repeating-linear-gradient(#0000 0 calc(1.2rem - 1px), #66afe1 0 1.2rem) right bottom / 100% 100%, linear-gradient(red 0 0) 30px 0 / 2px 100% #fff;
+  background-repeat: no-repeat;
+  line-height: 100%;
+  -webkit-mask: radial-gradient(circle .8rem at 2px 50%, #0000 98%, #000) 0 0 / 100% 2.4rem;
+  max-height: 400px; /* Ajustează în funcție de nevoi */
+  overflow-y: auto;
+}
+
+/* Stil pentru scrollbar */
+.card::-webkit-scrollbar {
+  width: 12px;
+  background-color: #F5F5F5; /* Fundalul track-ului scrollbar-ului */
+}
+
+.card::-webkit-scrollbar-thumb {
+  background-color: #606062; /* Culoarea thumb-ului scrollbar-ului */
+  border-radius: 10px;
+}
+
+.card::-webkit-scrollbar-track {
+  background-color: #F5F5F5; /* Fundalul track-ului scrollbar-ului */
+}
+
+.card_image {
+  height: calc(13 * 1.2rem);
+  padding: 1.2rem 1.2rem 0;
+  position: relative;
+}
+
+.card_image:before,
+.card_image:after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  left: 60%;
+  top: 0;
+  height: 45px;
+  background: #e6e6e6b8;
+  transform: rotate(45deg);
+}
+
+.card_image:after {
+  transform: rotate(-45deg);
+  top: auto;
+  bottom: -22px;
+  left: 40%;
+}
+
+.card_image img {
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  
+  object-fit: cover;
 }
-/* RETETE AFISAJ */
-.recipes {
+
+.card_content {
+  padding: 1.2rem;
+}
+
+.card_content p,
+.card_content ol,
+.card_content ul {
+  word-wrap: break-word; /* Împarte cuvintele când depășesc lățimea disponibilă */
+  overflow-wrap: break-word; /* Asigură că textul se continuă pe următorul rând */
+}
+
+h2.card_title, p {
+  margin: 1.2rem 0;
+}
+
+h2.card_title {
+  font-size: 1.3em;
+}
+
+html {
+  font-size: 15px;
+}
+
+/* Media queries pentru responsivitate */
+@media (max-width: 1024px) {
+  .cards_item {
+    flex: 1 1 calc(48% - 1.5rem); /* Carduri mai mari pe ecrane medii */
+  }
+}
+
+@media (max-width: 768px) {
+  .cards_item {
+    flex: 1 1 100%; /* Carduri pe întreaga lățime pe ecrane mici */
+  }
+}
+
+
+
+.recipes_fav {
   display: grid;
   max-width: 1024px;
   margin: 2rem auto 0;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-gap: 1rem;
   padding: 1rem;
 }
 
 .recipe {
-  background-color: var(--sidebar--color);
+  background-color: var(--recipe--color);
   padding: 1rem;
   border-radius: 0.5rem;
   text-align: center;
-  
+  overflow-wrap: break-word; /* Asigură că textul se sparge pe linii noi */
 }
-.recipe img{
-  position: relative;
+
+.recipe img {
   width: 100%;
   height: 300px;
   object-fit: cover;
   border: 8px solid #a562e6;
   border-radius: 0.5rem;
 }
-h1 {
-  font-size: 2.5rem;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
+.recipe h3, .recipe p, .recipe ul, .recipe ol {
+  margin: 0 0 1rem 0; /* Asigură spațiere între elemente */
+  word-wrap: break-word; /* Sparge cuvintele lungi pentru a preveni depășirea */
+}
+
+.recipe ul, .recipe ol {
+  padding-left: 1rem; /* Asigură indentarea corectă a listelor */
+  text-align: left; /* Asigură alinierea corectă a textului în liste */
+}
+
+.recipe ul li, .recipe ol li {
+  margin-bottom: 0.5rem; /* Asigură spațiere între elementele listei */
+}
+
+@media (max-width: 1024px) {
+  .recipes_fav {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .recipes_fav {
+    grid-template-columns: 1fr;
+  }
 }
 
 
@@ -688,14 +917,32 @@ li {
 }
 .checkbox-wrapper-65 {
   background-color: white;
-  
-  min-width: 480px;
   margin-top: 20px;
   border-radius: 10px;
   padding: 1rem;
   margin: 1rem;
-  
   user-select: none;
+  max-height: 55em; /* Setează înălțimea maximă dorită */
+  overflow-y: auto; /* Permite scroll vertical */
+  
+}
+/* Stil pentru scrollbar */
+.checkbox-wrapper-65::-webkit-scrollbar {
+  width: 12px;
+  background-color: #F5F5F5; /* Fundalul track-ului scrollbar-ului */
+  border-radius: 10px;
+}
+
+.checkbox-wrapper-65::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #606062; /* Culoarea thumb-ului scrollbar-ului */
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+.checkbox-wrapper-65::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 10px;
+  background-color: #F5F5F5;
 }
 .sidebar.close ~ .checkbox-wrapper-65 {
   width: 50%;
@@ -885,6 +1132,8 @@ textarea {
   margin-left: 2rem;
   margin-right: 2rem;
 }
+
+
 
 /* MENIU LA POZA DE PROFIL */
 /* 

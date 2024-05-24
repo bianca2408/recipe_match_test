@@ -14,8 +14,8 @@ import { database } from "../firebase.js";
 import { getDoc, collection, getDocs, doc, updateDoc, arrayRemove } from "firebase/firestore"
 import Modal from "../components/Modal.js";
 import Login from "./Login.jsx";
-
-export default function Favorite() {
+import '../Stilizare/frigider.css';
+export default function Home() {
   const user = auth.currentUser;
   const inputFileRef = useRef();
   const navigate = useNavigate();
@@ -77,80 +77,9 @@ export default function Favorite() {
     });
   };
 }, []); 
-  const handleView = (id) => {
-    const updatedRecipes = recipes.map(recipe => {
-      if (recipe.id === id) {
-        return { ...recipe, viewing: !recipe.viewing };
-      } else {
-        return { ...recipe, viewing: false };
-      }
-    });
-    setRecipes(updatedRecipes);
-  };
-  
-  const [recipes, setRecipes] = useState([]);
+ 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const userUid = localStorage.getItem("userUid");
-      const userDocRef = doc(database, "utilizatori", userUid);
-      try {
-        const docSnap = await getDoc(userDocRef);
-        if (docSnap.exists()) {
-          const userData = docSnap.data();
-          const favoriteRecipeIds = userData.favorite || [];
-          const favoriteRecipes = [];
-          // Interogare pentru a obține doar rețetele favorite ale utilizatorului
-          const querySnapshot = await getDocs(collection(database, "retete_utilizator"));
-          querySnapshot.forEach((doc) => {
-            if (favoriteRecipeIds.includes(doc.id)) {
-              favoriteRecipes.push({ id: doc.id, ...doc.data() });
-            }
-          });
-          setRecipes(favoriteRecipes);
-        } else {
-          console.log("Documentul utilizatorului nu există!");
-        }
-      } catch (error) {
-        console.error("Eroare la citirea documentului utilizatorului:", error);
-      }
-    };
-    fetchData();
-  }, []);
-  //STERGERE RETETA DE LA FAVORITE//
-  const handleDelete = async (recipeId) => {
-    const userUid = localStorage.getItem("userUid");
-    const userDocRef = doc(database, "utilizatori", userUid);
-    try {
-      await updateDoc(userDocRef, {
-        favorite: arrayRemove(recipeId)
-      });
-      // Update the local state to remove the deleted recipe
-      setRecipes(recipes.filter(recipe => recipe.id !== recipeId));
-    } catch (error) {
-      console.error("Eroare la ștergerea rețetei din favorite:", error);
-    }
-  };
-//MODAL PENTRU CONFIRMARE STERGERE//
-const [isModalOpen, setIsModalOpen] = useState(false);
-const [recipeToDelete, setRecipeToDelete] = useState(null);
 
-const openModal = (recipeId) => {
-  setRecipeToDelete(recipeId);
-  setIsModalOpen(true);
-};
-
-const closeModal = () => {
-  setIsModalOpen(false);
-  setRecipeToDelete(null);
-};
-
-const handleConfirmDelete = () => {
-  if (recipeToDelete) {
-    handleDelete(recipeToDelete);
-  }
-  closeModal();
-};
 
   return (
     <div>
@@ -249,46 +178,12 @@ const handleConfirmDelete = () => {
         <div className="main--content">
           <div className="header--wrapper">
           
-          <h2 style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '2px solid lightgray' }}>Rețete favorite</h2>
+          <h2 style={{ textAlign: 'center', fontFamily: "Poppins, sans-serif", fontSize: '2rem', color: '#fff', marginTop: '20px', borderBottom: '2px solid lightgray' }}>Frigider</h2>
 
-            
-            <div className="recipes_fav">
-              {recipes.map((recipe) => (
-                <div className="recipe" key={recipe.id}>
-                  {recipe.imagine && <img src={recipe.imagine} alt={`Imagine pentru ${recipe.titlu}`} />}
-                  <h3>{recipe.titlu}</h3>
-                  {recipe.viewing && (
-                    <div>
-                      <h4>Descriere</h4>
-                      <p dangerouslySetInnerHTML={{ __html: recipe.descriere }}></p>
-                      <h4>Ingrediente</h4>
-                      <ul>
-                        {recipe.ingrediente.map((ingredient, i) => (
-                          <li key={i}>{ingredient.ingredientName} - {ingredient.quantity}</li>
-                        ))}
-                      </ul>
-                      <h4>Instructiuni</h4>
-                      <ol>
-                        {recipe.instructiuni.map((step, i) => (
-                          <li key={i}>{step}</li>
-                        ))}
-                      </ol>
-                    </div>
-                  )}
-                  <div className="buttons">
-                    <button onClick={() => handleView(recipe.id)}>
-                      Vezi {recipe.viewing ? 'mai putin' : 'mai mult'}
-                    </button>
-                    <button className="remove" style={{marginTop: '1rem'}} onClick={() => openModal(recipe.id)}>
-                      Sterge
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+      
           </div>
         </div>
-        <Modal isOpen={isModalOpen} onClose={closeModal} onConfirm={handleConfirmDelete} />
+        
       </body>
     </div>
   );

@@ -17,7 +17,7 @@ import Login from "./Login.jsx";
 import ChatRoom from "../components/ChatRoom.jsx";
 import ParticipantsList from '../components/ParticipantsList.jsx';
 
-export default function Home() {
+export default function ChatRooms() {
   const user = auth.currentUser;
   const inputFileRef = useRef();
   const navigate = useNavigate();
@@ -372,7 +372,7 @@ const [currentGroupName, setCurrentGroupName] = useState("Grupuri de chat");
                             </Link>
                         </li>
                         <li className="nav-link">
-                        <Link to='/profile'>
+                        <Link to='/frigider'>
                                 <box-icon name='fridge' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Frigider

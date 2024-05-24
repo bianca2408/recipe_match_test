@@ -37,26 +37,34 @@ async function fetchDataFromFirestore(){
     return data;
     }
 //AFISARE RETETE PE BAZA FILTRU//
-    async function fetchRecipesFromFirestore(selectedIngredients) {
-      if (selectedIngredients.length === 0) {
-       
-        return []; // Returnează un array gol dacă nu sunt selectate ingrediente
-      }
-    
-      const selectedIngredientIds = selectedIngredients.map(ingredient => ingredient.id);
-      
-    
-      const recipesQuery = query(
-        collection(database, "retete_utilizator"),
-        where("ingrediente", "array-contains-any", selectedIngredientIds)
-      );
-    
-      const querySnapshot = await getDocs(recipesQuery);
-      const recipes = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    
-      
-      return recipes;
-    }
+async function fetchRecipesFromFirestore(selectedIngredients) {
+  if (selectedIngredients.length === 0) {
+    console.log("Niciun ingredient selectat.");
+    return []; // Returnează un array gol dacă nu sunt selectate ingrediente
+  }
+
+  const selectedIngredientNames = selectedIngredients.map(ingredient => ingredient.nume_ingredient);
+  console.log("Numele ingredientelor selectate:", selectedIngredientNames);
+
+  const recipesQuery = query(
+    collection(database, "retete_utilizator")
+  );
+
+  const querySnapshot = await getDocs(recipesQuery);
+  const allRecipes = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  console.log("Toate rețetele obținute din Firestore:", allRecipes);
+
+  // Filtrarea retetelor corespunzatoare ingredientelor selectate
+  const filteredRecipes = allRecipes.filter(recipe => {
+    return selectedIngredients.every(selectedIngredient => {
+      return recipe.ingrediente.some(ingredient => ingredient.ingredientName === selectedIngredient.nume_ingredient);
+    });
+  });
+
+  console.log("Rețetele filtrate:", filteredRecipes);
+
+  return filteredRecipes;
+}
 
 export default function Home(){
 
@@ -102,13 +110,7 @@ export default function Home(){
 
  
 
-      // Filtrarea retetelor corespunzatoare ingredientelor selectate
-      const filteredRecipes = recipes.filter(recipe => {
-        return selectedIngredients.every(selectedIngredient => {
-          return recipe.ingrediente.includes(selectedIngredient.id);
-        });
-      });
-      setFilteredRecipes(filteredRecipes);
+      
     }
 const handleLogOut = (e) =>{
 
@@ -247,7 +249,7 @@ const errorMessage = error.message;
                             </Link>
                         </li>
                         <li className="nav-link">
-                        <Link to='/profile'>
+                        <Link to='/frigider'>
                                 <box-icon name='fridge' class="icon"></box-icon>
                                 <span className="text nav-text">
                                     Frigider
